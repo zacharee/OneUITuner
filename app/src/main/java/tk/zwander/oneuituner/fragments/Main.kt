@@ -27,4 +27,10 @@ class Main : PreferenceFragmentCompat() {
             true
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        activity?.setTitle(R.string.app_name)
+    }
 }

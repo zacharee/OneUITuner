@@ -1,4 +1,6 @@
 <resources>
-    <style name="AppTheme" parent="Theme.AppCompat"
-        />
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
 </resources>
