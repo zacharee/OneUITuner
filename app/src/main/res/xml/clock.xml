@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        android:title="@string/stock_clock"
+        android:summary="@string/stock_clock_desc"
+        android:key="stock_clock"
+        />
+
+    <ListPreference
+        android:title="@string/am_pm"
+        android:summary="@string/am_pm_desc"
+        android:key="am_pm"
+        android:entries="@array/am_pm_style_names"
+        android:entryValues="@array/am_pm_style_values"
+        android:defaultValue="gone"
+        app:isPreferenceVisible="false"
+        />
+
+</PreferenceScreen>

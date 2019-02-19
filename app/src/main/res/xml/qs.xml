@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <tk.zwander.seekbarpreference.SeekBarPreference
+        android:title="@string/header_count_portrait"
+        android:key="header_count_portrait"
+        android:defaultValue="6"
+        app:minValue="6"
+        app:maxValue="10"
+        />
+
+    <tk.zwander.seekbarpreference.SeekBarPreference
+        android:title="@string/header_count_landscape"
+        android:key="header_count_landscape"
+        android:defaultValue="10"
+        app:minValue="6"
+        app:maxValue="18"
+        />
+
+</PreferenceScreen>

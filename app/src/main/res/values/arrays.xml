@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="am_pm_style_names">
+        <item>@string/am_pm_style_gone</item>
+        <item>@string/am_pm_style_small</item>
+        <item>@string/am_pm_style_normal</item>
+    </string-array>
+
+    <string-array name="am_pm_style_values">
+        <item>gone</item>
+        <item>small</item>
+        <item>normal</item>
+    </string-array>
+</resources>
