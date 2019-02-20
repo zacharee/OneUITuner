@@ -69,6 +69,7 @@ fun Context.uninstall(which: String) {
     val pkg = when (which) {
         Keys.clock -> Keys.clockPkg
         Keys.qs -> Keys.qsPkg
+        Keys.recents -> Keys.recentsPkg
         else -> return
     }
 
