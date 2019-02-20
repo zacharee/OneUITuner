@@ -1,8 +1,10 @@
 package tk.zwander.oneuituner.util
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.AssetManager
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.core.content.pm.PackageInfoCompat
@@ -60,6 +62,18 @@ val Context.zipalign: String?
         Shell.SH.run("chmod 755 ${zipalign.absolutePath}")
         return zipalign.absolutePath
     }
+
+fun Context.uninstall(which: String) {
+    val pkg = when (which) {
+        Keys.clock -> Keys.clockPkg
+        Keys.qs -> Keys.qsPkg
+        else -> return
+    }
+
+    val uninstalIntent = Intent(Intent.ACTION_DELETE)
+    uninstalIntent.data = Uri.parse("package:$pkg")
+    startActivity(uninstalIntent)
+}
 
 fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
     val data = when (which) {

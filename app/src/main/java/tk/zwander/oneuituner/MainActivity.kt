@@ -3,9 +3,15 @@ package tk.zwander.oneuituner
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.LayoutTransition
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -20,22 +26,23 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import tk.zwander.oneuituner.util.Keys
-import tk.zwander.oneuituner.util.install
-import tk.zwander.oneuituner.util.isInstalled
-import tk.zwander.oneuituner.util.navController
+import tk.zwander.oneuituner.util.*
 import java.io.File
 
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener, (File) -> Unit {
     private val currentFrag: NavDestination?
         get() = navController.currentDestination
+    private val overlayReceiver = OverlayReceiver()
+    private val handler = Handler(Looper.getMainLooper())
 
     private val backButton by lazy { createBackButton() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        overlayReceiver.register()
 
         root.layoutTransition = LayoutTransition()
             .apply {
@@ -56,7 +63,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
 
         remove.setOnClickListener {
-
+            uninstall(currentFrag?.label.toString())
         }
 
         val animDuration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
@@ -119,6 +126,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onDestroy() {
         super.onDestroy()
 
+        overlayReceiver.unregister()
         navController.removeOnDestinationChangedListener(this)
     }
 
@@ -179,5 +187,29 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         mNavButtonView.isAccessible = true
 
         return mNavButtonView.get(toolbar) as ImageButton
+    }
+
+    inner class OverlayReceiver : BroadcastReceiver() {
+        fun register() {
+            val remFilter = IntentFilter()
+            remFilter.addAction(Intent.ACTION_PACKAGE_ADDED)
+            remFilter.addAction(Intent.ACTION_PACKAGE_REMOVED)
+            remFilter.addDataScheme("package")
+
+            registerReceiver(this, remFilter)
+        }
+
+        fun unregister() {
+            unregisterReceiver(this)
+        }
+
+        override fun onReceive(context: Context?, intent: Intent?) {
+            Log.e("OneUITuner", intent?.action)
+
+            when (intent?.action) {
+                Intent.ACTION_PACKAGE_ADDED,
+                    Intent.ACTION_PACKAGE_REMOVED -> updateFABs()
+            }
+        }
     }
 }
