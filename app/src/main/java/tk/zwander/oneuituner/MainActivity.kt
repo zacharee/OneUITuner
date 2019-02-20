@@ -204,8 +204,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
 
         override fun onReceive(context: Context?, intent: Intent?) {
-            Log.e("OneUITuner", intent?.action)
-
             when (intent?.action) {
                 Intent.ACTION_PACKAGE_ADDED,
                     Intent.ACTION_PACKAGE_REMOVED -> updateFABs()

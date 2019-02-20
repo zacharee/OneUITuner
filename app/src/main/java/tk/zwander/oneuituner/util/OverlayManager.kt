@@ -6,7 +6,6 @@ import android.content.res.AssetManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import androidx.core.content.pm.PackageInfoCompat
 import com.android.apksig.ApkSigner
 import eu.chainfire.libsuperuser.Shell
@@ -308,11 +307,7 @@ fun Context.compileOverlay(manifest: File, overlayFile: File, resFile: File, tar
         .append(overlayFile)
         .toString()
 
-    Log.e("OneUITuner", aaptCmd)
-
     Shell.run("sh", arrayOf(aaptCmd), null, true)
-        .apply { Log.e("OneUITuner", toString()) }
-
     Shell.SH.run("chmod 777 ${overlayFile.absolutePath}")
 }
 
