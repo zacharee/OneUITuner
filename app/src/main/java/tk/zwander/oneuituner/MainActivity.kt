@@ -9,8 +9,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -34,7 +32,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private val currentFrag: NavDestination?
         get() = navController.currentDestination
     private val overlayReceiver = OverlayReceiver()
-    private val handler = Handler(Looper.getMainLooper())
 
     private val backButton by lazy { createBackButton() }
 
