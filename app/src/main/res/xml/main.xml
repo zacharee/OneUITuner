@@ -12,8 +12,8 @@
         />
 
     <Preference
-        android:title="@string/recents"
-        android:key="recents"
+        android:title="@string/misc"
+        android:key="misc"
         />
 
 </PreferenceScreen>

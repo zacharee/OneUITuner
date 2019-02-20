@@ -29,9 +29,9 @@ class Main : PreferenceFragmentCompat() {
             true
         }
 
-        findPreference(Keys.recents).setOnPreferenceClickListener {
+        findPreference(Keys.misc).setOnPreferenceClickListener {
             navController.navigate(
-                R.id.action_main_to_recents,
+                R.id.action_main_to_misc,
                 null,
                 navOptions
             )

@@ -153,8 +153,8 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 remove_wrapper.animatedVisibility = if (isInstalled(Keys.qsPkg)) View.VISIBLE else View.GONE
             }
 
-            R.id.recents -> {
-                remove_wrapper.animatedVisibility = if (isInstalled(Keys.recentsPkg)) View.VISIBLE else View.GONE
+            R.id.misc -> {
+                remove_wrapper.animatedVisibility = if (isInstalled(Keys.miscPkg)) View.VISIBLE else View.GONE
             }
         }
     }

@@ -9,12 +9,10 @@ import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
 import com.android.apksig.ApkSigner
 import eu.chainfire.libsuperuser.Shell
-import tk.zwander.oneuituner.BuildConfig
 import java.io.*
 import java.security.KeyStore
 import java.security.PrivateKey
 import java.security.cert.X509Certificate
-import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.CipherInputStream
 
@@ -22,20 +20,6 @@ enum class OverlayType {
     UNSIGNED_UNALIGNED,
     UNSIGNED,
     SIGNED
-}
-
-object Keys {
-    const val systemuiPkg = "com.android.systemui"
-    const val androidPkg = "android"
-
-    const val overlay = "overlay"
-    const val clock = "clock"
-    const val qs = "qs"
-    const val recents = "recents"
-
-    const val clockPkg = "$systemuiPkg.${BuildConfig.APPLICATION_ID}.$overlay.$clock"
-    const val qsPkg = "$systemuiPkg.${BuildConfig.APPLICATION_ID}.$overlay.$qs"
-    const val recentsPkg = "$androidPkg.${BuildConfig.APPLICATION_ID}.$overlay.$recents"
 }
 
 val Context.aapt: String?
@@ -69,7 +53,7 @@ fun Context.uninstall(which: String) {
     val pkg = when (which) {
         Keys.clock -> Keys.clockPkg
         Keys.qs -> Keys.qsPkg
-        Keys.recents -> Keys.recentsPkg
+        Keys.misc -> Keys.miscPkg
         else -> return
     }
 
@@ -132,21 +116,32 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                 )
             )
         }
-        Keys.recents -> {
+        Keys.misc -> {
             OverlayInfo(
                 Keys.androidPkg,
-                Keys.recentsPkg,
+                Keys.miscPkg,
                 arrayListOf(
                     ResourceFileData(
                         "config.xml",
                         "values",
                         makeResourceXml(
-                            ResourceData(
-                                "string",
-                                "config_recentsComponentName",
-                                "com.android.systemui/.recents.RecentsActivity",
-                                "translatable=\"false\""
-                            )
+                            mutableListOf<ResourceData>()
+                                .apply {
+                                    if (prefs.oldRecents) {
+                                        add(ResourceData(
+                                            "string",
+                                            "config_recentsComponentName",
+                                            "com.android.systemui/.recents.RecentsActivity",
+                                            "translatable=\"false\""
+                                        ))
+                                    }
+
+                                    add(ResourceData(
+                                        "dimen",
+                                        "navigation_bar_height",
+                                        "${prefs.navHeight}dp"
+                                    ))
+                                }
                         )
                     )
                 )
@@ -174,6 +169,9 @@ fun Context.getResourceXmlFromAsset(folder: String, file: String): String {
                 .toString()
         }
 }
+
+fun makeResourceXml(data: List<ResourceData>) =
+        makeResourceXml(*data.toTypedArray())
 
 fun makeResourceXml(vararg data: ResourceData): String {
     return StringBuilder()

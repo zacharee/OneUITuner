@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        android:title="@string/old_recents"
+        android:summary="@string/old_recents_desc"
+        android:key="old_recents"
+        />
+
+    <tk.zwander.seekbarpreference.SeekBarPreference
+        android:title="@string/nav_height"
+        android:key="nav_height"
+        android:defaultValue="480"
+        app:scale="0.1"
+        app:units="dp"
+        app:minValue="0"
+        app:maxValue="1000"
+        />
+
+</PreferenceScreen>

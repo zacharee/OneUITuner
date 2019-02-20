@@ -21,6 +21,9 @@ class PrefManager private constructor(private val context: Context) {
 
         const val HEADER_COUNT_PORTRAIT = "header_count_portrait"
         const val HEADER_COUNT_LANDSCAPE = "header_count_landscape"
+
+        const val OLD_RECENTS = "old_recents"
+        const val NAV_HEIGHT = "nav_height"
     }
 
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -36,6 +39,12 @@ class PrefManager private constructor(private val context: Context) {
 
     val headerCountLandscape: Int
         get() = getInt(HEADER_COUNT_LANDSCAPE, 10)
+
+    val oldRecents: Boolean
+        get() = getBoolean(OLD_RECENTS, false)
+
+    val navHeight: Float
+        get() = getInt(NAV_HEIGHT, 480) / 10f
 
     fun getInt(key: String, def: Int = 0) = prefs.getInt(key, def)
     fun getString(key: String, def: String): String = prefs.getString(key, def) ?: def
