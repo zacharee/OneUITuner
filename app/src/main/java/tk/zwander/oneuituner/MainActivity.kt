@@ -130,7 +130,13 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         navController.removeOnDestinationChangedListener(this)
     }
 
-    private fun updateFABs() {
+    override fun onResume() {
+        super.onResume()
+
+        updateFABs()
+    }
+
+    fun updateFABs() {
         val id = currentFrag?.id
         setBackClickable(id != R.id.main)
 
@@ -204,6 +210,8 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
 
         override fun onReceive(context: Context?, intent: Intent?) {
+            Log.e("OneUITuner", intent?.action)
+
             when (intent?.action) {
                 Intent.ACTION_PACKAGE_ADDED,
                     Intent.ACTION_PACKAGE_REMOVED -> updateFABs()
