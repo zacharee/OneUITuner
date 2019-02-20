@@ -3,14 +3,17 @@
 
     <string name="clock">Clock</string>
     <string name="qs">Quick Settings</string>
+    <string name="recents">Recents</string>
 
     <string name="stock_clock">AOSP Clock</string>
     <string name="am_pm">AM/PM Indicator</string>
     <string name="header_count_portrait">Header Count (Portrait)</string>
     <string name="header_count_landscape">Header Count (Landscape)</string>
+    <string name="old_recents">Old Recents Menu</string>
 
     <string name="stock_clock_desc">Replaces Samsung\'s status bar clock with AOSP\'s. This allows the use of Settings.Secure.clock_seconds.</string>
     <string name="am_pm_desc">Choose the style of the AM/PM indicator (only works for 12-hour time).</string>
+    <string name="old_recents_desc">Restore the old vertical Recents carousel.</string>
 
     <string name="reboot_others_desc">It\'s strongly recommended that you reboot after applying new settings. Would you like to reboot now?</string>
 

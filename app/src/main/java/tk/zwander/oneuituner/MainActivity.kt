@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -135,22 +134,27 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     fun updateFABs() {
         val id = currentFrag?.id
-        setBackClickable(id != R.id.main)
+        val enabled = id != R.id.main
+
+        setBackClickable(enabled)
+
+        apply_wrapper.animatedVisibility = if (enabled) View.VISIBLE else View.GONE
 
         when (id) {
             R.id.main -> {
                 remove_wrapper.animatedVisibility = View.GONE
-                apply_wrapper.animatedVisibility = View.GONE
             }
 
             R.id.clock -> {
                 remove_wrapper.animatedVisibility = if (isInstalled(Keys.clockPkg)) View.VISIBLE else View.GONE
-                apply_wrapper.animatedVisibility = View.VISIBLE
             }
 
             R.id.qs -> {
                 remove_wrapper.animatedVisibility = if (isInstalled(Keys.qsPkg)) View.VISIBLE else View.GONE
-                apply_wrapper.animatedVisibility = View.VISIBLE
+            }
+
+            R.id.recents -> {
+                remove_wrapper.animatedVisibility = if (isInstalled(Keys.recentsPkg)) View.VISIBLE else View.GONE
             }
         }
     }
@@ -207,8 +211,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
 
         override fun onReceive(context: Context?, intent: Intent?) {
-            Log.e("OneUITuner", intent?.action)
-
             when (intent?.action) {
                 Intent.ACTION_PACKAGE_ADDED,
                     Intent.ACTION_PACKAGE_REMOVED -> updateFABs()

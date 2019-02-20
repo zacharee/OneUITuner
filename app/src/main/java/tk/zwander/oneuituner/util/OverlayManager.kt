@@ -26,13 +26,16 @@ enum class OverlayType {
 
 object Keys {
     const val systemuiPkg = "com.android.systemui"
+    const val androidPkg = "android"
 
     const val overlay = "overlay"
     const val clock = "clock"
     const val qs = "qs"
+    const val recents = "recents"
 
     const val clockPkg = "$systemuiPkg.${BuildConfig.APPLICATION_ID}.$overlay.$clock"
     const val qsPkg = "$systemuiPkg.${BuildConfig.APPLICATION_ID}.$overlay.$qs"
+    const val recentsPkg = "$androidPkg.${BuildConfig.APPLICATION_ID}.$overlay.$recents"
 }
 
 val Context.aapt: String?
@@ -84,7 +87,10 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                     ResourceFileData(
                         "qs_status_bar_clock.xml",
                         "layout",
-                        getResourceXmlFromAsset("clock/layout", if (prefs.stockClock) "qs_status_bar_clock_aosp.xml" else "qs_status_bar_clock_tw.xml")
+                        getResourceXmlFromAsset(
+                            "clock/layout",
+                            if (prefs.stockClock) "qs_status_bar_clock_aosp.xml" else "qs_status_bar_clock_tw.xml"
+                        )
                             .replace("gone", prefs.amPmStyle)
                     ),
                     ResourceFileData(
@@ -124,7 +130,27 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                     )
                 )
             )
-            }
+        }
+        Keys.recents -> {
+            OverlayInfo(
+                Keys.androidPkg,
+                Keys.recentsPkg,
+                arrayListOf(
+                    ResourceFileData(
+                        "config.xml",
+                        "values",
+                        makeResourceXml(
+                            ResourceData(
+                                "string",
+                                "config_recentsComponentName",
+                                "com.android.systemui/.recents.RecentsActivity",
+                                "translatable=\"false\""
+                            )
+                        )
+                    )
+                )
+            )
+        }
         else -> return
     }
 
@@ -266,7 +292,11 @@ fun Context.getManifest(base: File, packageName: String, overlayPkg: String): Fi
     builder.append("<overlay android:targetPackage=\"$packageName\" />")
     builder.append("<application android:allowBackup=\"false\" android:hasCode=\"false\">")
     builder.append("<meta-data android:name=\"app_version\" android:value=\"v=${info.versionName}\" />")
-    builder.append("<meta-data android:name=\"app_version_code\" android:value=\"v=${PackageInfoCompat.getLongVersionCode(info)}\" />")
+    builder.append(
+        "<meta-data android:name=\"app_version_code\" android:value=\"v=${PackageInfoCompat.getLongVersionCode(
+            info
+        )}\" />"
+    )
     builder.append("<meta-data android:name=\"overlay_version\" android:value=\"100\" />")
     builder.append("<meta-data android:name=\"target_package\" android:value=\"$packageName\" />")
     builder.append("</application>")

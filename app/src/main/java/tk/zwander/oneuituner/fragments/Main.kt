@@ -15,7 +15,8 @@ class Main : PreferenceFragmentCompat() {
             navController.navigate(
                 R.id.action_main_to_clock,
                 null,
-                navOptions)
+                navOptions
+            )
             true
         }
 
@@ -23,7 +24,17 @@ class Main : PreferenceFragmentCompat() {
             navController.navigate(
                 R.id.action_main_to_qs,
                 null,
-                navOptions)
+                navOptions
+            )
+            true
+        }
+
+        findPreference(Keys.recents).setOnPreferenceClickListener {
+            navController.navigate(
+                R.id.action_main_to_recents,
+                null,
+                navOptions
+            )
             true
         }
     }

@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_main_to_qs"
             app:destination="@id/qs" />
+        <action
+            android:id="@+id/action_main_to_recents"
+            app:destination="@id/recents" />
     </fragment>
 
     <fragment
@@ -26,6 +29,12 @@
         android:id="@+id/qs"
         android:label="qs"
         android:name="tk.zwander.oneuituner.fragments.QS"
+        />
+
+    <fragment
+        android:id="@+id/recents"
+        android:name="tk.zwander.oneuituner.fragments.Recents"
+        android:label="recents"
         />
 
 </navigation>
