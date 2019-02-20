@@ -18,4 +18,9 @@
         app:maxValue="18"
         />
 
+    <Preference
+        android:summary="@string/qqs_hint"
+        android:enabled="false"
+        />
+
 </PreferenceScreen>
