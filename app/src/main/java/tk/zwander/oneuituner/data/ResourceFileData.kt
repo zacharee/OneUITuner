@@ -1,4 +1,4 @@
-package tk.zwander.oneuituner.util
+package tk.zwander.oneuituner.data
 
 open class ResourceFileData(
      val filename: String,

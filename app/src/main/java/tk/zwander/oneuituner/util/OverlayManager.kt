@@ -9,6 +9,10 @@ import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
 import com.android.apksig.ApkSigner
 import eu.chainfire.libsuperuser.Shell
+import tk.zwander.oneuituner.data.LayoutData
+import tk.zwander.oneuituner.data.ResourceData
+import tk.zwander.oneuituner.data.ResourceFileData
+import tk.zwander.oneuituner.data.ResourceImageData
 import java.io.*
 import java.security.KeyStore
 import java.security.PrivateKey
@@ -137,15 +141,17 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                                     "${prefs.navHeight}dp"
                                 )
                             ).apply {
-                                    if (prefs.oldRecents) {
-                                        add(ResourceData(
+                                if (prefs.oldRecents) {
+                                    add(
+                                        ResourceData(
                                             "string",
                                             "config_recentsComponentName",
                                             "com.android.systemui/.recents.RecentsActivity",
                                             "translatable=\"false\""
-                                        ))
-                                    }
+                                        )
+                                    )
                                 }
+                            }
                         )
                     )
                 )
@@ -175,7 +181,7 @@ fun Context.getResourceXmlFromAsset(folder: String, file: String): String {
 }
 
 fun makeResourceXml(data: List<ResourceData>) =
-        makeResourceXml(*data.toTypedArray())
+    makeResourceXml(*data.toTypedArray())
 
 fun makeResourceXml(vararg data: ResourceData): String {
     return StringBuilder()
