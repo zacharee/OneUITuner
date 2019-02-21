@@ -9,7 +9,6 @@ import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
 import com.android.apksig.ApkSigner
 import eu.chainfire.libsuperuser.Shell
-import tk.zwander.oneuituner.data.LayoutData
 import tk.zwander.oneuituner.data.ResourceData
 import tk.zwander.oneuituner.data.ResourceFileData
 import tk.zwander.oneuituner.data.ResourceImageData
@@ -193,25 +192,6 @@ fun makeResourceXml(vararg data: ResourceData): String {
             }
         }
         .append("</resources>")
-        .toString()
-}
-
-fun makeLayoutXml(vararg data: LayoutData): String {
-    return StringBuilder()
-        .append("<?xml version=\"1.0\" encoding=\"utf-8\"?>")
-        .apply {
-            data.forEach {
-                append("<${it.tag}\n")
-                it.items.forEach { t, u ->
-                    append("$t=\"$u\"\n")
-                }
-                append(">\n")
-                it.children?.forEach { child ->
-                    append(makeLayoutXml(child))
-                }
-                append("</${it.tag}>\n")
-            }
-        }
         .toString()
 }
 
