@@ -18,12 +18,6 @@ import java.security.KeyStore
 import java.security.PrivateKey
 import java.security.cert.X509Certificate
 
-enum class OverlayType {
-    UNSIGNED_UNALIGNED,
-    UNSIGNED,
-    SIGNED
-}
-
 fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
     val data = when (which) {
         Keys.clock -> {
