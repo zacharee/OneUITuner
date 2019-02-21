@@ -1,6 +1,4 @@
-package tk.zwander.oneuituner.util
-
-import tk.zwander.oneuituner.data.ResourceFileData
+package tk.zwander.oneuituner.data
 
 data class OverlayInfo(
     val targetPkg: String,

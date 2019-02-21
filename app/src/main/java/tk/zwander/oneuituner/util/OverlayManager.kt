@@ -9,6 +9,7 @@ import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
 import com.android.apksig.ApkSigner
 import eu.chainfire.libsuperuser.Shell
+import tk.zwander.oneuituner.data.OverlayInfo
 import tk.zwander.oneuituner.data.ResourceData
 import tk.zwander.oneuituner.data.ResourceFileData
 import tk.zwander.oneuituner.data.ResourceImageData
