@@ -125,8 +125,18 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                         "config.xml",
                         "values",
                         makeResourceXml(
-                            mutableListOf<ResourceData>()
-                                .apply {
+                            mutableListOf(
+                                ResourceData(
+                                    "dimen",
+                                    "navigation_bar_height",
+                                    "${prefs.navHeight}dp"
+                                ),
+                                ResourceData(
+                                    "dimen",
+                                    "navigation_bar_width",
+                                    "${prefs.navHeight}dp"
+                                )
+                            ).apply {
                                     if (prefs.oldRecents) {
                                         add(ResourceData(
                                             "string",
@@ -135,12 +145,6 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                                             "translatable=\"false\""
                                         ))
                                     }
-
-                                    add(ResourceData(
-                                        "dimen",
-                                        "navigation_bar_height",
-                                        "${prefs.navHeight}dp"
-                                    ))
                                 }
                         )
                     )
