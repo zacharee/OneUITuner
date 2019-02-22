@@ -11,14 +11,12 @@
     <string name="old_recents">Old Recents Menu</string>
     <string name="nav_height">Navigation Bar Height</string>
     <string name="clock_format">Status Bar Clock Format</string>
-    <string name="qs_date_format">Quick Settings Date Format</string>
+    <string name="qs_date_format">QS Date Format (Reboot Required)</string>
     <string name="custom_clock_format_ref">Clock/Date Formatting Reference</string>
 
     <string name="custom_clock_desc">Replaces Samsung\'s status bar clock with a custom version that allows you to set your own time format.</string>
-    <string name="am_pm_desc">Choose the style of the AM/PM indicator (only works for 12-hour time).</string>
-    <string name="old_recents_desc">Restore the old vertical Recents carousel.</string>
+    <string name="old_recents_desc">Restores the old vertical Recents carousel. Reboot required.</string>
 
-    <string name="reboot_others_desc">It\'s strongly recommended that you reboot after applying new settings. Would you like to reboot now?</string>
     <string name="qqs_hint">Set your QS grid to 5x3 if the header icons overlap at higher values.</string>
 
     <string name="am_pm_style_gone">Gone</string>
