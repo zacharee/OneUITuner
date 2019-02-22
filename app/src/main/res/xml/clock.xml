@@ -3,19 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <SwitchPreference
-        android:title="@string/stock_clock"
-        android:summary="@string/stock_clock_desc"
-        android:key="stock_clock"
+        android:title="@string/custom_clock"
+        android:summary="@string/custom_clock_desc"
+        android:key="custom_clock"
         />
 
-    <ListPreference
-        android:title="@string/am_pm"
-        android:summary="@string/am_pm_desc"
-        android:key="am_pm"
-        android:entries="@array/am_pm_style_names"
-        android:entryValues="@array/am_pm_style_values"
-        android:defaultValue="gone"
-        app:isPreferenceVisible="false"
+    <EditTextPreference
+        android:title="@string/clock_format"
+        android:key="clock_format"
+        android:dependency="custom_clock"
+        android:defaultValue="h:mm a"
         />
+
+    <Preference
+        android:title="@string/custom_clock_format_ref"
+        android:key="clock_format_ref"
+        android:dependency="custom_clock">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://developer.android.com/reference/java/text/SimpleDateFormat.html"
+            />
+
+    </Preference>
 
 </PreferenceScreen>

@@ -16,8 +16,9 @@ class PrefManager private constructor(private val context: Context) {
             return instance!!
         }
 
-        const val STOCK_CLOCK = "stock_clock"
+        const val CUSTOM_CLOCK = "custom_clock"
         const val AM_PM = "am_pm"
+        const val CLOCK_FORMAT = "clock_format"
 
         const val HEADER_COUNT_PORTRAIT = "header_count_portrait"
         const val HEADER_COUNT_LANDSCAPE = "header_count_landscape"
@@ -28,11 +29,14 @@ class PrefManager private constructor(private val context: Context) {
 
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-    val stockClock: Boolean
-        get() = getBoolean(STOCK_CLOCK, false)
+    val customClock: Boolean
+        get() = getBoolean(CUSTOM_CLOCK, false)
 
     val amPmStyle: String
         get() = getString(AM_PM, "gone")
+
+    val clockFormat: String
+        get() = getString(CLOCK_FORMAT, "h:mm a")
 
     val headerCountPortrait: Int
         get() = getInt(HEADER_COUNT_PORTRAIT, 6)

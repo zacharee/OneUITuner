@@ -24,22 +24,22 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
             OverlayInfo(
                 Keys.systemuiPkg,
                 Keys.clockPkg,
-                arrayListOf(
-                    ResourceFileData(
-                        "qs_status_bar_clock.xml",
-                        "layout",
-                        getResourceXmlFromAsset(
-                            "clock/layout",
-                            if (prefs.stockClock) "qs_status_bar_clock_aosp.xml" else "qs_status_bar_clock_tw.xml"
+                mutableListOf<ResourceFileData>().apply {
+                    val format = prefs.clockFormat
+
+                    if (format.isValidClockFormat && prefs.customClock) {
+                        add(
+                            ResourceFileData(
+                                "qs_status_bar_clock.xml",
+                                "layout",
+                                getResourceXmlFromAsset(
+                                    "clock/layout",
+                                    "qs_status_bar_clock_custom.xml"
+                                ).replace("h:mm a", format)
+                            )
                         )
-                            .replace("gone", prefs.amPmStyle)
-                    ),
-                    ResourceFileData(
-                        "attrs.xml",
-                        "values",
-                        getResourceXmlFromAsset("clock/values", "attrs.xml")
-                    )
-                )
+                    }
+                }
             )
         }
         Keys.qs -> {

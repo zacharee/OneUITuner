@@ -2,6 +2,8 @@ package tk.zwander.oneuituner.util
 
 import android.app.Activity
 import android.content.Context
+import android.icu.text.SimpleDateFormat
+import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
@@ -67,3 +69,11 @@ val navOptions: NavOptions
 
 val Activity.navController: NavController
     get() = findNavController(R.id.nav_host)
+
+val String.isValidClockFormat: Boolean
+    get() = try {
+        SimpleDateFormat(this)
+        true
+    } catch (e: Exception) {
+        false
+    }
