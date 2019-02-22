@@ -1,13 +1,14 @@
 package tk.zwander.oneuituner.fragments
 
 import android.os.Bundle
-import androidx.preference.PreferenceFragmentCompat
 import tk.zwander.oneuituner.R
 import tk.zwander.oneuituner.util.Keys
 import tk.zwander.oneuituner.util.navController
 import tk.zwander.oneuituner.util.navOptions
 
-class Main : PreferenceFragmentCompat() {
+class Main : Base() {
+    override val title = R.string.app_name
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.main, rootKey)
 
@@ -37,11 +38,5 @@ class Main : PreferenceFragmentCompat() {
             )
             true
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        activity?.setTitle(R.string.app_name)
     }
 }

@@ -1,16 +1,17 @@
 package tk.zwander.oneuituner.fragments
 
 import android.os.Bundle
-import androidx.preference.PreferenceFragmentCompat
 import tk.zwander.oneuituner.R
+import tk.zwander.oneuituner.util.PrefManager
 
-class Clock : PreferenceFragmentCompat() {
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.clock, rootKey)
+class Clock : Base() {
+    override val title = R.string.clock
+
+    init {
+        keysToSync.add(PrefManager.CLOCK_FORMAT)
     }
 
-    override fun onResume() {
-        super.onResume()
-        activity?.setTitle(R.string.clock)
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.clock, rootKey)
     }
 }
