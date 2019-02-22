@@ -15,10 +15,15 @@
         android:defaultValue="h:mm a"
         />
 
+    <EditTextPreference
+        android:title="@string/qs_date_format"
+        android:key="qs_date_format"
+        android:defaultValue="EEEMMMMdd"
+        />
+
     <Preference
         android:title="@string/custom_clock_format_ref"
-        android:key="clock_format_ref"
-        android:dependency="custom_clock">
+        android:key="clock_format_ref">
 
         <intent
             android:action="android.intent.action.VIEW"

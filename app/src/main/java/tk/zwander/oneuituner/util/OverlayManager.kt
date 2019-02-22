@@ -25,9 +25,10 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                 Keys.systemuiPkg,
                 Keys.clockPkg,
                 mutableListOf<ResourceFileData>().apply {
-                    val format = prefs.clockFormat
+                    val clockFormat = prefs.clockFormat
+                    val qsDateFormat = prefs.qsDateFormat
 
-                    if (format.isValidClockFormat && prefs.customClock) {
+                    if (clockFormat.isValidClockFormat && prefs.customClock) {
                         add(
                             ResourceFileData(
                                 "qs_status_bar_clock.xml",
@@ -35,7 +36,23 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                                 getResourceXmlFromAsset(
                                     "clock/layout",
                                     "qs_status_bar_clock_custom.xml"
-                                ).replace("h:mm a", format)
+                                ).replace("h:mm a", clockFormat)
+                            )
+                        )
+                    }
+
+                    if (qsDateFormat.isValidClockFormat) {
+                        add(
+                            ResourceFileData(
+                                "strings.xml",
+                                "values",
+                                makeResourceXml(
+                                    ResourceData(
+                                        "string",
+                                        "system_ui_quick_panel_date_pattern",
+                                        qsDateFormat
+                                    )
+                                )
                             )
                         )
                     }

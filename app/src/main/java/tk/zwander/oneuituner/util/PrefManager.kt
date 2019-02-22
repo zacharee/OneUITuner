@@ -19,6 +19,7 @@ class PrefManager private constructor(private val context: Context) {
         const val CUSTOM_CLOCK = "custom_clock"
         const val AM_PM = "am_pm"
         const val CLOCK_FORMAT = "clock_format"
+        const val QS_DATE_FORMAT = "qs_date_format"
 
         const val HEADER_COUNT_PORTRAIT = "header_count_portrait"
         const val HEADER_COUNT_LANDSCAPE = "header_count_landscape"
@@ -32,11 +33,11 @@ class PrefManager private constructor(private val context: Context) {
     val customClock: Boolean
         get() = getBoolean(CUSTOM_CLOCK, false)
 
-    val amPmStyle: String
-        get() = getString(AM_PM, "gone")
-
     val clockFormat: String
         get() = getString(CLOCK_FORMAT, "h:mm a")
+
+    val qsDateFormat: String
+        get() = getString(QS_DATE_FORMAT, "EEEMMMMdd")
 
     val headerCountPortrait: Int
         get() = getInt(HEADER_COUNT_PORTRAIT, 6)

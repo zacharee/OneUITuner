@@ -5,13 +5,14 @@
     <string name="qs">Quick Settings</string>
     <string name="misc">Miscellaneous</string>
 
-    <string name="custom_clock">Custom Clock</string>
+    <string name="custom_clock">Custom Status Bar Clock</string>
     <string name="header_count_portrait">Header Count (Portrait)</string>
     <string name="header_count_landscape">Header Count (Landscape)</string>
     <string name="old_recents">Old Recents Menu</string>
     <string name="nav_height">Navigation Bar Height</string>
-    <string name="clock_format">Clock Format</string>
-    <string name="custom_clock_format_ref">Clock Formatting Reference</string>
+    <string name="clock_format">Status Bar Clock Format</string>
+    <string name="qs_date_format">Quick Settings Date Format</string>
+    <string name="custom_clock_format_ref">Clock/Date Formatting Reference</string>
 
     <string name="custom_clock_desc">Replaces Samsung\'s status bar clock with a custom version that allows you to set your own time format.</string>
     <string name="am_pm_desc">Choose the style of the AM/PM indicator (only works for 12-hour time).</string>
