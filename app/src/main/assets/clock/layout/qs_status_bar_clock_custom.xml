@@ -11,5 +11,9 @@
     android:textAppearance="@*com.android.systemui:style/TextAppearance.StatusBar.Clock"
     android:format12Hour="h:mm a"
     android:format24Hour="h:mm a"
+    android:shadowColor="#7f000000"
+    android:shadowDx="1"
+    android:shadowDy="1"
+    android:shadowRadius="4"
     xmlns:android="http://schemas.android.com/apk/res/android"
     />
