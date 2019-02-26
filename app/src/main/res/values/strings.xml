@@ -16,6 +16,7 @@
     <string name="custom_clock_format_ref">Clock/Date Formatting Reference</string>
     <string name="left_system_icons">Left System Icons</string>
     <string name="hide_status_bar_carrier">Hide Carrier Name</string>
+    <string name="custom_qs_date_format">Custom QS Date Format</string>
 
     <string name="custom_clock_desc">Replaces Samsung\'s status bar clock with a custom version that allows you to set your own time format.</string>
     <string name="old_recents_desc">Restores the old vertical Recents carousel. Reboot required.</string>
@@ -23,8 +24,4 @@
     <string name="hide_status_bar_carrier_desc">Hide the carrier label in the status bar on the lock screen and when unlocked. Reboot required.</string>
 
     <string name="qqs_hint">Set your QS grid to 5x3 if the header icons overlap at higher values.</string>
-
-    <string name="am_pm_style_gone">Gone</string>
-    <string name="am_pm_style_small">Small</string>
-    <string name="am_pm_style_normal">Normal</string>
 </resources>

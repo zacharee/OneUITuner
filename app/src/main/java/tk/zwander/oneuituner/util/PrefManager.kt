@@ -18,6 +18,7 @@ class PrefManager private constructor(private val context: Context) {
 
         const val CUSTOM_CLOCK = "custom_clock"
         const val CLOCK_FORMAT = "clock_format"
+        const val CUSTOM_QS_DATE_FORMAT = "custom_qs_date_format"
         const val QS_DATE_FORMAT = "qs_date_format"
 
         const val HEADER_COUNT_PORTRAIT = "header_count_portrait"
@@ -37,6 +38,9 @@ class PrefManager private constructor(private val context: Context) {
 
     val clockFormat: String
         get() = getString(CLOCK_FORMAT, "h:mm a")
+
+    val customQsDateFormat: Boolean
+        get() = getBoolean(CUSTOM_QS_DATE_FORMAT, false)
 
     val qsDateFormat: String
         get() = getString(QS_DATE_FORMAT, "EEEMMMMdd")

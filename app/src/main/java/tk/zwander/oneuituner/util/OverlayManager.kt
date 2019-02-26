@@ -29,7 +29,7 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                     val clockFormat = prefs.clockFormat
                     val qsDateFormat = prefs.qsDateFormat
 
-                    if (clockFormat.isValidClockFormat && prefs.customClock) {
+                    if (prefs.customClock && clockFormat.isValidClockFormat) {
                         add(
                             ResourceFileData(
                                 "qs_status_bar_clock.xml",
@@ -42,7 +42,7 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                         )
                     }
 
-                    if (qsDateFormat.isValidClockFormat) {
+                    if (prefs.customQsDateFormat && qsDateFormat.isValidClockFormat) {
                         add(
                             ResourceFileData(
                                 "strings.xml",

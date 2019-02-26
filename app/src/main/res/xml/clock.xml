@@ -15,9 +15,15 @@
         android:defaultValue="h:mm a"
         />
 
+    <SwitchPreference
+        android:title="@string/custom_qs_date_format"
+        android:key="custom_qs_date_format"
+        />
+
     <EditTextPreference
         android:title="@string/qs_date_format"
         android:key="qs_date_format"
+        android:dependency="custom_qs_date_format"
         android:defaultValue="EEEMMMMdd"
         />
 
