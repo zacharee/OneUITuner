@@ -17,7 +17,6 @@ class PrefManager private constructor(private val context: Context) {
         }
 
         const val CUSTOM_CLOCK = "custom_clock"
-        const val AM_PM = "am_pm"
         const val CLOCK_FORMAT = "clock_format"
         const val QS_DATE_FORMAT = "qs_date_format"
 
@@ -26,6 +25,9 @@ class PrefManager private constructor(private val context: Context) {
 
         const val OLD_RECENTS = "old_recents"
         const val NAV_HEIGHT = "nav_height"
+
+        const val LEFT_SYSTEM_ICONS = "left_system_icons"
+        const val HIDE_STATUS_BAR_CARRIER = "hide_status_bar_carrier"
     }
 
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -50,6 +52,12 @@ class PrefManager private constructor(private val context: Context) {
 
     val navHeight: Float
         get() = getInt(NAV_HEIGHT, 480) / 10f
+
+    val leftSystemIcons: Boolean
+        get() = getBoolean(LEFT_SYSTEM_ICONS, false)
+
+    val hideStatusBarCarrier: Boolean
+        get() = getBoolean(HIDE_STATUS_BAR_CARRIER, false)
 
     fun getInt(key: String, def: Int = 0) = prefs.getInt(key, def)
     fun getString(key: String, def: String): String = prefs.getString(key, def) ?: def

@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_main_to_misc"
             app:destination="@id/misc" />
+        <action
+            android:id="@+id/action_main_to_statusBar"
+            app:destination="@id/statusBar" />
     </fragment>
 
     <fragment
@@ -35,6 +38,11 @@
         android:id="@+id/misc"
         android:name="tk.zwander.oneuituner.fragments.Misc"
         android:label="misc"
+        />
+    <fragment
+        android:id="@+id/statusBar"
+        android:name="tk.zwander.oneuituner.fragments.StatusBar"
+        android:label="status_bar"
         />
 
 </navigation>

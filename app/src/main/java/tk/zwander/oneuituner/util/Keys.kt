@@ -10,8 +10,10 @@ object Keys {
     const val clock = "clock"
     const val qs = "qs"
     const val misc = "misc"
+    const val statusBar = "status_bar"
 
     const val clockPkg = "$systemuiPkg.${BuildConfig.APPLICATION_ID}.$overlay.$clock"
     const val qsPkg = "$systemuiPkg.${BuildConfig.APPLICATION_ID}.$overlay.$qs"
     const val miscPkg = "$androidPkg.${BuildConfig.APPLICATION_ID}.$overlay.$misc"
+    const val statusBarPkg = "$systemuiPkg.${BuildConfig.APPLICATION_ID}.$overlay.$statusBar"
 }

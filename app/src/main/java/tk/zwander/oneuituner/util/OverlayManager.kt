@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import com.android.apksig.ApkSigner
 import eu.chainfire.libsuperuser.Shell
 import tk.zwander.oneuituner.data.OverlayInfo
@@ -126,6 +127,50 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                 )
             )
         }
+        Keys.statusBar -> {
+            OverlayInfo(
+                Keys.systemuiPkg,
+                Keys.statusBarPkg,
+                ArrayList<ResourceFileData>()
+                    .apply {
+                        if (prefs.leftSystemIcons) {
+                            add(
+                                ResourceFileData(
+                                    "status_bar.xml",
+                                    "layout",
+                                    getResourceXmlFromAsset("statusbar/layout", "status_bar.xml")
+                                )
+                            )
+                        }
+
+                        add(
+                            ResourceFileData(
+                                "bools.xml",
+                                "values",
+                                makeResourceXml(
+                                    arrayListOf(
+                                        ResourceData(
+                                            "bool",
+                                            "config_showOperatorNameInStatusBar",
+                                            "${!prefs.hideStatusBarCarrier}"
+                                        )
+                                    )
+                                )
+                            )
+                        )
+
+                        if (prefs.hideStatusBarCarrier) {
+                            add(
+                                ResourceFileData(
+                                    "keyguard_status_bar.xml",
+                                    "layout",
+                                    getResourceXmlFromAsset("statusbar/layout", "keyguard_status_bar.xml")
+                                )
+                            )
+                        }
+                    }
+            )
+        }
         else -> return
     }
 
@@ -140,6 +185,7 @@ fun Context.uninstall(which: String) {
         Keys.clock -> Keys.clockPkg
         Keys.qs -> Keys.qsPkg
         Keys.misc -> Keys.miscPkg
+        Keys.statusBar -> Keys.statusBarPkg
         else -> return
     }
 
@@ -216,6 +262,7 @@ fun Context.compileOverlay(manifest: File, overlayFile: File, resFile: File, tar
         .toString()
 
     Shell.run("sh", arrayOf(aaptCmd), null, true)
+        .apply { Log.e("OneUITuner", toString()) }
     Shell.SH.run("chmod 777 ${overlayFile.absolutePath}")
 }
 

@@ -38,5 +38,14 @@ class Main : Base() {
             )
             true
         }
+
+        findPreference(Keys.statusBar).setOnPreferenceClickListener {
+            navController.navigate(
+                R.id.action_main_to_statusBar,
+                null,
+                navOptions
+            )
+            true
+        }
     }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:title="@string/left_system_icons"
+        android:summary="@string/left_system_icons_desc"
+        android:key="left_system_icons"
+        />
+
+    <SwitchPreference
+        android:title="@string/hide_status_bar_carrier"
+        android:summary="@string/hide_status_bar_carrier_desc"
+        android:key="hide_status_bar_carrier"
+        />
+
+</PreferenceScreen>

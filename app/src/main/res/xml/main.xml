@@ -12,6 +12,11 @@
         />
 
     <Preference
+        android:title="@string/status_bar"
+        android:key="status_bar"
+        />
+
+    <Preference
         android:title="@string/misc"
         android:key="misc"
         />
