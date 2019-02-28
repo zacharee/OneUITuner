@@ -10,11 +10,14 @@ import eu.chainfire.libsuperuser.Shell
 import tk.zwander.oneuituner.BuildConfig
 import tk.zwander.oneuituner.RootBridge
 import tk.zwander.oneuituner.util.WorkaroundInstaller
+import tk.zwander.oneuituner.util.completionIntent
 import tk.zwander.oneuituner.util.needsRoot
 import java.nio.file.Files
 
+@SuppressLint("StaticFieldLeak")
 object RootStuff {
-    private val workaroundInstaller = WorkaroundInstaller(RootJava.getSystemContext())
+    private val context = RootJava.getSystemContext()
+    private val workaroundInstaller = WorkaroundInstaller.getRootInstance(context)
 
     @JvmStatic
     fun main(args: Array<String>) {
@@ -66,6 +69,23 @@ object RootStuff {
                 Shell.SU.run("mount -o ro,remount /system")
             } else {
                 workaroundInstaller.installPackage(path, name)
+            }
+        }
+
+        override fun uninstallPkg(pkg: String) {
+            if (needsRoot) {
+                Shell.SU.run("mount -o rw,remount /system")
+
+                val path = context.packageManager.getPackageInfo(pkg, 0)
+                    .applicationInfo.sourceDir
+
+                SuFile(path).parentFile.deleteRecursively()
+
+                Shell.SU.run("mount -o ro,remount /system")
+
+                context.startActivity(completionIntent)
+            } else {
+                workaroundInstaller.uninstallPackage(pkg)
             }
         }
     }

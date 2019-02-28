@@ -1,21 +1,31 @@
 package tk.zwander.oneuituner.util
 
 import android.app.PendingIntent
-import android.content.ComponentName
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.Intent
 import android.content.pm.PackageInstaller
 import android.net.Uri
 import tk.zwander.oneuituner.BuildConfig
 import java.io.File
 import java.io.FileInputStream
 
-class WorkaroundInstaller(context: Context) : ContextWrapper(context) {
+class WorkaroundInstaller private constructor(context: Context) : ContextWrapper(context) {
     companion object {
         const val flags = 16777346
 
         const val ACTION_FINISHED = "${BuildConfig.APPLICATION_ID}.intent.action.FINISHED"
+
+        private var instance: WorkaroundInstaller? = null
+
+        fun getInstance(context: Context): WorkaroundInstaller {
+            if (instance == null) instance = WorkaroundInstaller(context.applicationContext)
+
+            return instance!!
+        }
+
+        fun getRootInstance(context: Context): WorkaroundInstaller {
+            return WorkaroundInstaller(context)
+        }
     }
 
     val packageInstaller = packageManager.packageInstaller
@@ -28,6 +38,17 @@ class WorkaroundInstaller(context: Context) : ContextWrapper(context) {
     fun installPackage(source: Uri, name: String) {
         val input = FileInputStream(contentResolver.openFileDescriptor(source, "r")!!.fileDescriptor)
         installInternal(input, name)
+    }
+
+    fun uninstallPackage(pkg: String) {
+        packageInstaller.uninstall(pkg,
+            PendingIntent.getActivity(
+                this,
+                100,
+                completionIntent,
+                0
+            ).intentSender
+        )
     }
 
     private fun installInternal(input: FileInputStream, name: String) {
@@ -61,9 +82,7 @@ class WorkaroundInstaller(context: Context) : ContextWrapper(context) {
                 PendingIntent.getActivity(
                     this,
                     sessionId,
-                    Intent(ACTION_FINISHED).apply {
-                        component = ComponentName(BuildConfig.APPLICATION_ID, "${BuildConfig.APPLICATION_ID}.MainActivity")
-                    },
+                    completionIntent,
                     0
                 ).intentSender
             )

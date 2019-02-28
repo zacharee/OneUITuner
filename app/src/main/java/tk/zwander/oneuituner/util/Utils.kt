@@ -1,10 +1,11 @@
 package tk.zwander.oneuituner.util
 
 import android.app.Activity
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Build
-import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceFragmentCompat
 import eu.chainfire.libsuperuser.Shell
 import tk.zwander.oneuituner.App
+import tk.zwander.oneuituner.BuildConfig
 import tk.zwander.oneuituner.R
 import java.io.File
 
@@ -48,6 +50,9 @@ val Context.app: App
 
 val Context.prefs: PrefManager
     get() = PrefManager.getInstance(this)
+
+val Context.workaroundInstaller: WorkaroundInstaller
+    get() = WorkaroundInstaller.getInstance(this)
 
 val needsRoot: Boolean
     get() {
@@ -87,4 +92,9 @@ val String.isValidClockFormat: Boolean
         true
     } catch (e: Exception) {
         false
+    }
+
+val completionIntent: Intent
+    get() = Intent(WorkaroundInstaller.ACTION_FINISHED).apply {
+        component = ComponentName(BuildConfig.APPLICATION_ID, "${BuildConfig.APPLICATION_ID}.MainActivity")
     }

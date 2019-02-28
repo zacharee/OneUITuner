@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private val overlayReceiver = OverlayReceiver()
 
     private val backButton by lazy { createBackButton() }
-    private val workaround by lazy { WorkaroundInstaller(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +64,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
 
         remove.setOnClickListener {
+            progress_remove.visibility = View.VISIBLE
             uninstall(currentFrag?.label.toString())
         }
 
@@ -107,9 +107,10 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         when (intent?.action) {
             WorkaroundInstaller.ACTION_FINISHED -> {
                 val status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -100)
-                val message: String? = intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE)
+//                val message: String? = intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE)
 
                 progress_apply.visibility = View.GONE
+                progress_remove.visibility = View.GONE
 
                 when (status) {
                     PackageInstaller.STATUS_PENDING_USER_ACTION -> {
@@ -118,12 +119,12 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     }
 
                     PackageInstaller.STATUS_SUCCESS -> {
-                        Toast.makeText(this, R.string.install_success, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, R.string.succeeded, Toast.LENGTH_SHORT).show()
                         updateFABs()
                     }
 
                     PackageInstaller.STATUS_FAILURE -> {
-                        Toast.makeText(this, R.string.install_failure, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, R.string.failed, Toast.LENGTH_SHORT).show()
                         updateFABs()
                     }
                 }
@@ -139,7 +140,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         )
 
         if (!Shell.SU.available()) {
-            workaround.installPackage(uri, apk.name)
+            workaroundInstaller.installPackage(uri, apk.name)
         } else {
             app.ipcReceiver.postIPCAction { it.installPkg(apk.absolutePath, apk.name) }
         }
@@ -264,10 +265,10 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
 
         override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent?.action) {
-                Intent.ACTION_PACKAGE_ADDED,
-                    Intent.ACTION_PACKAGE_REMOVED -> updateFABs()
-            }
+//            when (intent?.action) {
+//                Intent.ACTION_PACKAGE_ADDED,
+//                    Intent.ACTION_PACKAGE_REMOVED -> updateFABs()
+//            }
         }
     }
 }

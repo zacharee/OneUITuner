@@ -1,9 +1,7 @@
 package tk.zwander.oneuituner.util
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Build
 import android.util.Log
 import com.android.apksig.ApkSigner
@@ -193,9 +191,11 @@ fun Context.uninstall(which: String) {
         else -> return
     }
 
-    val uninstalIntent = Intent(Intent.ACTION_DELETE)
-    uninstalIntent.data = Uri.parse("package:$pkg")
-    startActivity(uninstalIntent)
+    if (Shell.SU.available()) {
+        app.ipcReceiver.postIPCAction { it.uninstallPkg(pkg) }
+    } else {
+        workaroundInstaller.uninstallPackage(pkg)
+    }
 }
 
 fun Context.doCompileAlignAndSign(
