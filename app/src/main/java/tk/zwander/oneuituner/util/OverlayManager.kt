@@ -8,6 +8,8 @@ import android.os.Build
 import android.util.Log
 import com.android.apksig.ApkSigner
 import eu.chainfire.libsuperuser.Shell
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import tk.zwander.oneuituner.data.OverlayInfo
 import tk.zwander.oneuituner.data.ResourceData
 import tk.zwander.oneuituner.data.ResourceFileData
@@ -20,164 +22,166 @@ import java.security.PrivateKey
 import java.security.cert.X509Certificate
 
 fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
-    val data = when (which) {
-        Keys.clock -> {
-            OverlayInfo(
-                Keys.systemuiPkg,
-                Keys.clockPkg,
-                mutableListOf<ResourceFileData>().apply {
-                    val clockFormat = prefs.clockFormat
-                    val qsDateFormat = prefs.qsDateFormat
+    GlobalScope.launch {
+        val data = when (which) {
+            Keys.clock -> {
+                OverlayInfo(
+                    Keys.systemuiPkg,
+                    Keys.clockPkg,
+                    mutableListOf<ResourceFileData>().apply {
+                        val clockFormat = prefs.clockFormat
+                        val qsDateFormat = prefs.qsDateFormat
 
-                    if (prefs.customClock && clockFormat.isValidClockFormat) {
-                        add(
-                            ResourceFileData(
-                                "qs_status_bar_clock.xml",
-                                "layout",
-                                getResourceXmlFromAsset(
-                                    "clock/layout",
-                                    "qs_status_bar_clock_custom.xml"
-                                ).replace("h:mm a", clockFormat)
-                            )
-                        )
-                    }
-
-                    if (prefs.customQsDateFormat && qsDateFormat.isValidClockFormat) {
-                        add(
-                            ResourceFileData(
-                                "strings.xml",
-                                "values",
-                                makeResourceXml(
-                                    ResourceData(
-                                        "string",
-                                        "system_ui_quick_panel_date_pattern",
-                                        qsDateFormat
-                                    )
+                        if (prefs.customClock && clockFormat.isValidClockFormat) {
+                            add(
+                                ResourceFileData(
+                                    "qs_status_bar_clock.xml",
+                                    "layout",
+                                    getResourceXmlFromAsset(
+                                        "clock/layout",
+                                        "qs_status_bar_clock_custom.xml"
+                                    ).replace("h:mm a", clockFormat)
                                 )
                             )
-                        )
-                    }
-                }
-            )
-        }
-        Keys.qs -> {
-            OverlayInfo(
-                Keys.systemuiPkg,
-                Keys.qsPkg,
-                arrayListOf(
-                    ResourceFileData(
-                        "integers.xml",
-                        "values",
-                        makeResourceXml(
-                            ResourceData(
-                                "integer",
-                                "quick_qs_tile_num",
-                                prefs.headerCountPortrait.toString()
-                            )
-                        )
-                    ),
-                    ResourceFileData(
-                        "integers.xml",
-                        "values-land",
-                        makeResourceXml(
-                            ResourceData(
-                                "integer",
-                                "quick_qs_tile_num",
-                                prefs.headerCountLandscape.toString()
-                            )
-                        )
-                    )
-                )
-            )
-        }
-        Keys.misc -> {
-            OverlayInfo(
-                Keys.androidPkg,
-                Keys.miscPkg,
-                arrayListOf(
-                    ResourceFileData(
-                        "config.xml",
-                        "values",
-                        makeResourceXml(
-                            mutableListOf(
-                                ResourceData(
-                                    "dimen",
-                                    "navigation_bar_height",
-                                    "${prefs.navHeight}dp"
-                                ),
-                                ResourceData(
-                                    "dimen",
-                                    "navigation_bar_width",
-                                    "${prefs.navHeight}dp"
-                                )
-                            ).apply {
-                                if (prefs.oldRecents) {
-                                    add(
+                        }
+
+                        if (prefs.customQsDateFormat && qsDateFormat.isValidClockFormat) {
+                            add(
+                                ResourceFileData(
+                                    "strings.xml",
+                                    "values",
+                                    makeResourceXml(
                                         ResourceData(
                                             "string",
-                                            "config_recentsComponentName",
-                                            "com.android.systemui/.recents.RecentsActivity",
-                                            "translatable=\"false\""
+                                            "system_ui_quick_panel_date_pattern",
+                                            qsDateFormat
                                         )
                                     )
-                                }
-                            }
-                        )
-                    )
-                )
-            )
-        }
-        Keys.statusBar -> {
-            OverlayInfo(
-                Keys.systemuiPkg,
-                Keys.statusBarPkg,
-                ArrayList<ResourceFileData>()
-                    .apply {
-                        if (prefs.leftSystemIcons) {
-                            add(
-                                ResourceFileData(
-                                    "status_bar.xml",
-                                    "layout",
-                                    getResourceXmlFromAsset("statusbar/layout", "status_bar.xml")
-                                )
-                            )
-                        }
-
-                        add(
-                            ResourceFileData(
-                                "bools.xml",
-                                "values",
-                                makeResourceXml(
-                                    arrayListOf(
-                                        ResourceData(
-                                            "bool",
-                                            "config_showOperatorNameInStatusBar",
-                                            "${!prefs.hideStatusBarCarrier}"
-                                        )
-                                    )
-                                )
-                            )
-                        )
-
-                        if (prefs.hideStatusBarCarrier) {
-                            add(
-                                ResourceFileData(
-                                    "keyguard_status_bar.xml",
-                                    "layout",
-                                    getResourceXmlFromAsset("statusbar/layout", "keyguard_status_bar.xml")
                                 )
                             )
                         }
                     }
-            )
-        }
-        else -> return
-    }
+                )
+            }
+            Keys.qs -> {
+                OverlayInfo(
+                    Keys.systemuiPkg,
+                    Keys.qsPkg,
+                    arrayListOf(
+                        ResourceFileData(
+                            "integers.xml",
+                            "values",
+                            makeResourceXml(
+                                ResourceData(
+                                    "integer",
+                                    "quick_qs_tile_num",
+                                    prefs.headerCountPortrait.toString()
+                                )
+                            )
+                        ),
+                        ResourceFileData(
+                            "integers.xml",
+                            "values-land",
+                            makeResourceXml(
+                                ResourceData(
+                                    "integer",
+                                    "quick_qs_tile_num",
+                                    prefs.headerCountLandscape.toString()
+                                )
+                            )
+                        )
+                    )
+                )
+            }
+            Keys.misc -> {
+                OverlayInfo(
+                    Keys.androidPkg,
+                    Keys.miscPkg,
+                    arrayListOf(
+                        ResourceFileData(
+                            "config.xml",
+                            "values",
+                            makeResourceXml(
+                                mutableListOf(
+                                    ResourceData(
+                                        "dimen",
+                                        "navigation_bar_height",
+                                        "${prefs.navHeight}dp"
+                                    ),
+                                    ResourceData(
+                                        "dimen",
+                                        "navigation_bar_width",
+                                        "${prefs.navHeight}dp"
+                                    )
+                                ).apply {
+                                    if (prefs.oldRecents) {
+                                        add(
+                                            ResourceData(
+                                                "string",
+                                                "config_recentsComponentName",
+                                                "com.android.systemui/.recents.RecentsActivity",
+                                                "translatable=\"false\""
+                                            )
+                                        )
+                                    }
+                                }
+                            )
+                        )
+                    )
+                )
+            }
+            Keys.statusBar -> {
+                OverlayInfo(
+                    Keys.systemuiPkg,
+                    Keys.statusBarPkg,
+                    ArrayList<ResourceFileData>()
+                        .apply {
+                            if (prefs.leftSystemIcons) {
+                                add(
+                                    ResourceFileData(
+                                        "status_bar.xml",
+                                        "layout",
+                                        getResourceXmlFromAsset("statusbar/layout", "status_bar.xml")
+                                    )
+                                )
+                            }
 
-    doCompileAlignAndSign(
-        data,
-        listener
-    )
+                            add(
+                                ResourceFileData(
+                                    "bools.xml",
+                                    "values",
+                                    makeResourceXml(
+                                        arrayListOf(
+                                            ResourceData(
+                                                "bool",
+                                                "config_showOperatorNameInStatusBar",
+                                                "${!prefs.hideStatusBarCarrier}"
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+
+                            if (prefs.hideStatusBarCarrier) {
+                                add(
+                                    ResourceFileData(
+                                        "keyguard_status_bar.xml",
+                                        "layout",
+                                        getResourceXmlFromAsset("statusbar/layout", "keyguard_status_bar.xml")
+                                    )
+                                )
+                            }
+                        }
+                )
+            }
+            else -> return@launch
+        }
+
+        doCompileAlignAndSign(
+            data,
+            listener
+        )
+    }
 }
 
 fun Context.uninstall(which: String) {

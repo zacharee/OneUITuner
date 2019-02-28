@@ -19,7 +19,8 @@
         android:theme="@style/AppTheme"
         android:name="tk.zwander.oneuituner.App"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="tk.zwander.oneuituner.MainActivity">
+        <activity android:name="tk.zwander.oneuituner.MainActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

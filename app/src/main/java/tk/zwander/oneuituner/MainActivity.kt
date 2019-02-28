@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageInstaller
 import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
@@ -16,6 +17,7 @@ import android.view.animation.AnticipateInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.ImageButton
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.FileProvider
@@ -33,6 +35,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private val overlayReceiver = OverlayReceiver()
 
     private val backButton by lazy { createBackButton() }
+    private val workaround by lazy { WorkaroundInstaller(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +58,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         navController.addOnDestinationChangedListener(this)
 
         apply.setOnClickListener {
+            progress_apply.visibility = View.VISIBLE
             install(currentFrag?.label.toString(), this)
         }
 
@@ -84,16 +88,46 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 //        Log.e("OneUITuner", hms.toString())
     }
 
-    override fun invoke(apk: File) {
-        val installIntent = Intent(Intent.ACTION_VIEW)
-        installIntent.setDataAndType(
-            FileProvider.getUriForFile(this,
-                "$packageName.apkprovider", apk),
-            "application/vnd.android.package-archive")
-        installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
 
-        startActivity(installIntent)
+        when (intent?.action) {
+            WorkaroundInstaller.ACTION_FINISHED -> {
+                val status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -100)
+                val message: String? = intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE)
+
+                progress_apply.visibility = View.GONE
+
+                Toast.makeText(this, message.toString(), Toast.LENGTH_SHORT).show()
+
+                when (status) {
+                    PackageInstaller.STATUS_PENDING_USER_ACTION -> {
+                        val confirmIntent = intent.extras?.get(Intent.EXTRA_INTENT) as Intent?
+                        startActivity(confirmIntent)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun invoke(apk: File) {
+        val uri = FileProvider.getUriForFile(
+            this,
+            "$packageName.apkprovider",
+            apk
+        )
+
+//        val installIntent = Intent(Intent.ACTION_VIEW)
+//        installIntent.setDataAndType(
+//            FileProvider.getUriForFile(this,
+//                "$packageName.apkprovider", apk),
+//            "application/vnd.android.package-archive")
+//        installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//        installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//
+//        startActivity(installIntent)
+
+        workaround.installPackage(uri, apk.name)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

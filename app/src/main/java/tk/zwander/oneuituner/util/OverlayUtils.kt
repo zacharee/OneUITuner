@@ -2,7 +2,6 @@ package tk.zwander.oneuituner.util
 
 import android.content.Context
 import android.content.res.AssetManager
-import androidx.core.content.pm.PackageInfoCompat
 import eu.chainfire.libsuperuser.Shell
 import tk.zwander.oneuituner.data.ResourceData
 import java.io.*
@@ -23,9 +22,7 @@ fun Context.getResourceXmlFromAsset(folder: String, file: String): String {
         }
 }
 
-fun Context.getManifest(base: File, packageName: String, overlayPkg: String): File {
-    val info = packageManager.getPackageInfo(packageName, 0)
-
+fun getManifest(base: File, packageName: String, overlayPkg: String): File {
     val builder = StringBuilder()
     builder.append("<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"no\"?>")
     builder.append(
@@ -36,17 +33,7 @@ fun Context.getManifest(base: File, packageName: String, overlayPkg: String): Fi
                 "android:versionName=\"100\"> "
     )
     builder.append("<uses-permission android:name=\"com.samsung.android.permission.SAMSUNG_OVERLAY_COMPONENT\" />")
-    builder.append("<overlay android:targetPackage=\"$packageName\" />")
-    builder.append("<application android:allowBackup=\"false\" android:hasCode=\"false\">")
-    builder.append("<meta-data android:name=\"app_version\" android:value=\"v=${info.versionName}\" />")
-    builder.append(
-        "<meta-data android:name=\"app_version_code\" android:value=\"v=${PackageInfoCompat.getLongVersionCode(
-            info
-        )}\" />"
-    )
-    builder.append("<meta-data android:name=\"overlay_version\" android:value=\"100\" />")
-    builder.append("<meta-data android:name=\"target_package\" android:value=\"$packageName\" />")
-    builder.append("</application>")
+    builder.append("<overlay android:targetPackage=\"$packageName\" android:category=\"samsung\" />")
     builder.append("</manifest>")
 
     val manifestFile = File(base, "AndroidManifest.xml")
