@@ -138,16 +138,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             apk
         )
 
-//        val installIntent = Intent(Intent.ACTION_VIEW)
-//        installIntent.setDataAndType(
-//            FileProvider.getUriForFile(this,
-//                "$packageName.apkprovider", apk),
-//            "application/vnd.android.package-archive")
-//        installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//        installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-//
-//        startActivity(installIntent)
-
         if (!Shell.SU.available()) {
             workaround.installPackage(uri, apk.name)
         } else {

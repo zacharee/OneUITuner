@@ -3,11 +3,15 @@ package tk.zwander.oneuituner.root
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.IBinder
+import com.topjohnwu.superuser.io.SuFile
 import eu.chainfire.librootjava.RootIPC
 import eu.chainfire.librootjava.RootJava
+import eu.chainfire.libsuperuser.Shell
 import tk.zwander.oneuituner.BuildConfig
 import tk.zwander.oneuituner.RootBridge
 import tk.zwander.oneuituner.util.WorkaroundInstaller
+import tk.zwander.oneuituner.util.needsRoot
+import java.nio.file.Files
 
 object RootStuff {
     private val workaroundInstaller = WorkaroundInstaller(RootJava.getSystemContext())
@@ -45,7 +49,24 @@ object RootStuff {
         }
 
         override fun installPkg(path: String, name: String) {
-            workaroundInstaller.installPackage(path, name)
+            if (needsRoot) {
+                Shell.SU.run("mount -o rw,remount /system")
+
+                val src = SuFile(path)
+                val dstDir = SuFile("/system/app/$name")
+
+                if (!dstDir.exists()) {
+                    dstDir.mkdirs()
+                }
+
+                val dstFile = SuFile(dstDir, "$name.apk")
+
+                Files.copy(src.toPath(), dstFile.toPath())
+
+                Shell.SU.run("mount -o ro,remount /system")
+            } else {
+                workaroundInstaller.installPackage(path, name)
+            }
         }
     }
 }
