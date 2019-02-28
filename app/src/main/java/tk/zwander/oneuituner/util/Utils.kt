@@ -3,6 +3,7 @@ package tk.zwander.oneuituner.util
 import android.app.Activity
 import android.content.Context
 import android.icu.text.SimpleDateFormat
+import android.os.Build
 import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -47,6 +48,16 @@ val Context.app: App
 
 val Context.prefs: PrefManager
     get() = PrefManager.getInstance(this)
+
+val needsRoot: Boolean
+    get() {
+        val df = SimpleDateFormat("YYYY-MM-DD")
+        val compDate = df.parse("2019-02-01")
+        val secDate = df.parse(Build.VERSION.SECURITY_PATCH)
+
+        return !Build.MODEL.contains("960")
+                || secDate.after(compDate)
+    }
 
 fun Context.isInstalled(packageName: String) =
         try {

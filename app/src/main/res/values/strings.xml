@@ -5,6 +5,7 @@
     <string name="qs">Quick Settings</string>
     <string name="misc">Miscellaneous</string>
     <string name="status_bar">Status Bar</string>
+    <string name="root_required">Root Required</string>
 
     <string name="custom_clock">Custom Status Bar Clock</string>
     <string name="header_count_portrait">Header Count (Portrait)</string>
@@ -17,7 +18,10 @@
     <string name="left_system_icons">Left System Icons</string>
     <string name="hide_status_bar_carrier">Hide Carrier Name</string>
     <string name="custom_qs_date_format">Custom QS Date Format</string>
+    <string name="install_success">Installation Succeeded</string>
+    <string name="install_failure">Installation Failed</string>
 
+    <string name="root_required_desc">Because of limitations added in later versions of One UI, your device must be rooted to use this app.</string>
     <string name="custom_clock_desc">Replaces Samsung\'s status bar clock with a custom version that allows you to set your own time format.</string>
     <string name="old_recents_desc">Restores the old vertical Recents carousel. Reboot required.</string>
     <string name="left_system_icons_desc">Move the system icons, like the WiFi, signal, etc icons, to the left of the status bar.</string>

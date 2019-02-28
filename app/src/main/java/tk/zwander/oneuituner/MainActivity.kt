@@ -18,11 +18,13 @@ import android.view.animation.OvershootInterpolator
 import android.widget.ImageButton
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import eu.chainfire.libsuperuser.Shell
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tk.zwander.oneuituner.util.*
@@ -86,6 +88,17 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 //            .get(d)
 //
 //        Log.e("OneUITuner", hms.toString())
+
+        if (needsRoot && !Shell.SU.available()) {
+            AlertDialog.Builder(this)
+                .setTitle(R.string.root_required)
+                .setMessage(R.string.root_required_desc)
+                .setCancelable(false)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    finish()
+                }
+                .show()
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -98,12 +111,20 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                 progress_apply.visibility = View.GONE
 
-                Toast.makeText(this, message.toString(), Toast.LENGTH_SHORT).show()
-
                 when (status) {
                     PackageInstaller.STATUS_PENDING_USER_ACTION -> {
                         val confirmIntent = intent.extras?.get(Intent.EXTRA_INTENT) as Intent?
                         startActivity(confirmIntent)
+                    }
+
+                    PackageInstaller.STATUS_SUCCESS -> {
+                        Toast.makeText(this, R.string.install_success, Toast.LENGTH_SHORT).show()
+                        updateFABs()
+                    }
+
+                    PackageInstaller.STATUS_FAILURE -> {
+                        Toast.makeText(this, R.string.install_failure, Toast.LENGTH_SHORT).show()
+                        updateFABs()
                     }
                 }
             }
@@ -127,7 +148,11 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 //
 //        startActivity(installIntent)
 
-        workaround.installPackage(uri, apk.name)
+        if (!Shell.SU.available()) {
+            workaround.installPackage(uri, apk.name)
+        } else {
+            app.ipcReceiver.postIPCAction { it.installPkg(apk.absolutePath, apk.name) }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

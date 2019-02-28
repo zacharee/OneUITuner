@@ -7,8 +7,11 @@ import eu.chainfire.librootjava.RootIPC
 import eu.chainfire.librootjava.RootJava
 import tk.zwander.oneuituner.BuildConfig
 import tk.zwander.oneuituner.RootBridge
+import tk.zwander.oneuituner.util.WorkaroundInstaller
 
 object RootStuff {
+    private val workaroundInstaller = WorkaroundInstaller(RootJava.getSystemContext())
+
     @JvmStatic
     fun main(args: Array<String>) {
         RootJava.restoreOriginalLdLibraryPath()
@@ -36,9 +39,13 @@ object RootStuff {
             asInterface.invoke(null, binder)
         }
 
-        override fun reboot(reason: String?) {
+        override fun reboot(reason: String) {
             iPMClass.getMethod("reboot", Boolean::class.java, String::class.java, Boolean::class.java)
                 .invoke(pm, false, reason, true)
+        }
+
+        override fun installPkg(path: String, name: String) {
+            workaroundInstaller.installPackage(path, name)
         }
     }
 }
