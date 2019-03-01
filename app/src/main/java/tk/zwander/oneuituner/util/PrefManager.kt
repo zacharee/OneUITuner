@@ -26,6 +26,7 @@ class PrefManager private constructor(private val context: Context) {
 
         const val OLD_RECENTS = "old_recents"
         const val NAV_HEIGHT = "nav_height"
+        const val STATUS_BAR_HEIGHT = "status_bar_height"
 
         const val LEFT_SYSTEM_ICONS = "left_system_icons"
         const val HIDE_STATUS_BAR_CARRIER = "hide_status_bar_carrier"
@@ -56,6 +57,9 @@ class PrefManager private constructor(private val context: Context) {
 
     val navHeight: Float
         get() = getInt(NAV_HEIGHT, 480) / 10f
+
+    val statusBarHeight: Float
+        get() = getInt(STATUS_BAR_HEIGHT, 240) / 10f
 
     val leftSystemIcons: Boolean
         get() = getBoolean(LEFT_SYSTEM_ICONS, false)

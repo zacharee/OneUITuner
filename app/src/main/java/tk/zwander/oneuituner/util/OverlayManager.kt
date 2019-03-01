@@ -110,6 +110,11 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                                         "dimen",
                                         "navigation_bar_width",
                                         "${prefs.navHeight}dp"
+                                    ),
+                                    ResourceData(
+                                        "dimen",
+                                        "status_bar_height_portrait",
+                                        "${prefs.statusBarHeight}dp"
                                     )
                                 ).apply {
                                     if (prefs.oldRecents) {

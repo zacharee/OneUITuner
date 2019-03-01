@@ -18,4 +18,14 @@
         app:maxValue="1000"
         />
 
+    <tk.zwander.seekbarpreference.SeekBarPreference
+        android:title="@string/status_bar_height"
+        android:key="status_bar_height"
+        android:defaultValue="240"
+        app:scale="0.1"
+        app:units="dp"
+        app:minValue="0"
+        app:maxValue="1000"
+        />
+
 </PreferenceScreen>
