@@ -17,6 +17,11 @@
         />
 
     <Preference
+        android:title="@string/lock_screen"
+        android:key="lock_screen"
+        />
+
+    <Preference
         android:title="@string/misc"
         android:key="misc"
         />

@@ -47,5 +47,14 @@ class Main : Base() {
             )
             true
         }
+
+        findPreference(Keys.lockScreen).setOnPreferenceClickListener {
+            navController.navigate(
+                R.id.action_main_to_lockScreen,
+                null,
+                navOptions
+            )
+            true
+        }
     }
 }

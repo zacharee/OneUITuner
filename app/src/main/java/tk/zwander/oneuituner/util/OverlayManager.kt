@@ -193,6 +193,28 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                         }
                 )
             }
+            Keys.lockScreen -> {
+                OverlayInfo(
+                    Keys.systemuiPkg,
+                    Keys.lockScreenPkg,
+                    ArrayList<ResourceFileData>()
+                        .apply {
+                            add(
+                                ResourceFileData(
+                                    "bools.xml",
+                                    "values",
+                                    makeResourceXml(
+                                        ResourceData(
+                                            "bool",
+                                            "config_enableLockScreenRotation",
+                                            "${prefs.lockScreenRotation}"
+                                        )
+                                    )
+                                )
+                            )
+                        }
+                )
+            }
             else -> return@launch
         }
 

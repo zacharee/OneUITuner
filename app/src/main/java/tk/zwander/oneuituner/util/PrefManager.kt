@@ -31,6 +31,8 @@ class PrefManager private constructor(private val context: Context) {
 
         const val LEFT_SYSTEM_ICONS = "left_system_icons"
         const val HIDE_STATUS_BAR_CARRIER = "hide_status_bar_carrier"
+
+        const val LOCK_SCREEN_ROTATION = "lock_screen_rotation"
     }
 
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -70,6 +72,9 @@ class PrefManager private constructor(private val context: Context) {
 
     val hideStatusBarCarrier: Boolean
         get() = getBoolean(HIDE_STATUS_BAR_CARRIER, false)
+
+    val lockScreenRotation: Boolean
+        get() = getBoolean(LOCK_SCREEN_ROTATION, false)
 
     fun getInt(key: String, def: Int = 0) = prefs.getInt(key, def)
     fun getString(key: String, def: String): String = prefs.getString(key, def) ?: def
