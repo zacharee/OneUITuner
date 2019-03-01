@@ -54,16 +54,6 @@ val Context.prefs: PrefManager
 val Context.workaroundInstaller: WorkaroundInstaller
     get() = WorkaroundInstaller.getInstance(this)
 
-val needsRoot: Boolean
-    get() {
-        val df = SimpleDateFormat("YYYY-MM-DD")
-        val compDate = df.parse("2019-02-01")
-        val secDate = df.parse(Build.VERSION.SECURITY_PATCH)
-
-        return !Build.MODEL.contains("960")
-                || secDate.after(compDate)
-    }
-
 fun Context.isInstalled(packageName: String) =
         try {
             packageManager.getPackageInfo(packageName, 0)
@@ -82,6 +72,16 @@ val navOptions: NavOptions
         .setPopEnterAnim(android.R.anim.fade_in)
         .setPopExitAnim(android.R.anim.fade_out)
         .build()
+
+val needsRoot: Boolean
+    get() {
+        val df = SimpleDateFormat("YYYY-MM-DD")
+        val compDate = df.parse("2019-02-01")
+        val secDate = df.parse(Build.VERSION.SECURITY_PATCH)
+
+        return !(Build.MODEL.contains("960") || Build.MODEL.contains("965"))
+                || secDate.after(compDate)
+    }
 
 val Activity.navController: NavController
     get() = findNavController(R.id.nav_host)
