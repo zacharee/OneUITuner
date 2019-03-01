@@ -23,6 +23,7 @@ class PrefManager private constructor(private val context: Context) {
 
         const val HEADER_COUNT_PORTRAIT = "header_count_portrait"
         const val HEADER_COUNT_LANDSCAPE = "header_count_landscape"
+        const val HIDE_QS_TILE_BACKGROUND = "hide_qs_tile_background"
 
         const val OLD_RECENTS = "old_recents"
         const val NAV_HEIGHT = "nav_height"
@@ -51,6 +52,9 @@ class PrefManager private constructor(private val context: Context) {
 
     val headerCountLandscape: Int
         get() = getInt(HEADER_COUNT_LANDSCAPE, 10)
+
+    val hideQsTileBackground: Boolean
+        get() = getBoolean(HIDE_QS_TILE_BACKGROUND, false)
 
     val oldRecents: Boolean
         get() = getBoolean(OLD_RECENTS, false)

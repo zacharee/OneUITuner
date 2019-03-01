@@ -23,4 +23,9 @@
         android:enabled="false"
         />
 
+    <SwitchPreference
+        android:title="@string/hide_qs_tile_background"
+        android:key="hide_qs_tile_background"
+        />
+
 </PreferenceScreen>

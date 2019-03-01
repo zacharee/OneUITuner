@@ -88,7 +88,23 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                                 )
                             )
                         )
-                    )
+                    ).apply {
+                        if (prefs.hideQsTileBackground) {
+                            add(
+                                ResourceFileData(
+                                    "colors.xml",
+                                    "values",
+                                    makeResourceXml(
+                                        ResourceData(
+                                            "color",
+                                            "qs_tile_round_background_on",
+                                            "@android:color/transparent"
+                                        )
+                                    )
+                                )
+                            )
+                        }
+                    }
                 )
             }
             Keys.misc -> {
