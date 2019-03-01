@@ -2,6 +2,7 @@ package tk.zwander.oneuituner.root
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageInstaller
 import android.os.IBinder
 import com.topjohnwu.superuser.io.SuFile
 import eu.chainfire.librootjava.RootIPC
@@ -53,20 +54,31 @@ object RootStuff {
 
         override fun installPkg(path: String, name: String) {
             if (needsRoot) {
-                Shell.SU.run("mount -o rw,remount /system")
+                val intent = completionIntent
 
-                val src = SuFile(path)
-                val dstDir = SuFile("/system/app/$name")
+                try {
+                    Shell.SU.run("mount -o rw,remount /system")
 
-                if (!dstDir.exists()) {
-                    dstDir.mkdirs()
+                    val src = SuFile(path)
+                    val dstDir = SuFile("/system/app/$name")
+
+                    if (!dstDir.exists()) {
+                        dstDir.mkdirs()
+                    }
+
+                    val dstFile = SuFile(dstDir, "$name.apk")
+
+                    Files.copy(src.toPath(), dstFile.toPath())
+
+                    Shell.SU.run("mount -o ro,remount /system")
+
+                    intent.putExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_SUCCESS)
+                } catch (e: Exception) {
+                    intent.putExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE)
+                    intent.putExtra(PackageInstaller.EXTRA_STATUS_MESSAGE, e.message)
                 }
 
-                val dstFile = SuFile(dstDir, "$name.apk")
-
-                Files.copy(src.toPath(), dstFile.toPath())
-
-                Shell.SU.run("mount -o ro,remount /system")
+                context.startActivity(intent)
             } else {
                 workaroundInstaller.installPackage(path, name)
             }
@@ -74,16 +86,25 @@ object RootStuff {
 
         override fun uninstallPkg(pkg: String) {
             if (needsRoot) {
-                Shell.SU.run("mount -o rw,remount /system")
+                val intent = completionIntent
 
-                val path = context.packageManager.getPackageInfo(pkg, 0)
-                    .applicationInfo.sourceDir
+                try {
+                    Shell.SU.run("mount -o rw,remount /system")
 
-                SuFile(path).parentFile.deleteRecursively()
+                    val path = context.packageManager.getPackageInfo(pkg, 0)
+                        .applicationInfo.sourceDir
 
-                Shell.SU.run("mount -o ro,remount /system")
+                    SuFile(path).parentFile.deleteRecursively()
 
-                context.startActivity(completionIntent)
+                    Shell.SU.run("mount -o ro,remount /system")
+
+                    intent.putExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_SUCCESS)
+                } catch (e: Exception) {
+                    intent.putExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE)
+                    intent.putExtra(PackageInstaller.EXTRA_STATUS_MESSAGE, e.message)
+                }
+
+                context.startActivity(intent)
             } else {
                 workaroundInstaller.uninstallPackage(pkg)
             }
