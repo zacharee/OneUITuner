@@ -77,6 +77,11 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                                 ),
                                 ResourceData(
                                     "integer",
+                                    "quick_qs_tile_min_num",
+                                    "2"
+                                ),
+                                ResourceData(
+                                    "integer",
                                     "qspanel_screen_grid_columns_5",
                                     prefs.qsColCountPortrait.toString()
                                 ),

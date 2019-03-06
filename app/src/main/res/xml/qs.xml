@@ -6,7 +6,7 @@
         android:title="@string/header_count_portrait"
         android:key="header_count_portrait"
         android:defaultValue="6"
-        app:minValue="6"
+        app:minValue="2"
         app:maxValue="10"
         />
 
@@ -14,7 +14,7 @@
         android:title="@string/header_count_landscape"
         android:key="header_count_landscape"
         android:defaultValue="10"
-        app:minValue="6"
+        app:minValue="2"
         app:maxValue="18"
         />
 
