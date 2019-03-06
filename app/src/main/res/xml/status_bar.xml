@@ -5,12 +5,14 @@
         android:title="@string/left_system_icons"
         android:summary="@string/left_system_icons_desc"
         android:key="left_system_icons"
+        android:defaultValue="@bool/left_system_icons_default"
         />
 
     <SwitchPreference
         android:title="@string/hide_status_bar_carrier"
         android:summary="@string/hide_status_bar_carrier_desc"
         android:key="hide_status_bar_carrier"
+        android:defaultValue="@bool/hide_status_bar_carrier_default"
         />
 
 </PreferenceScreen>

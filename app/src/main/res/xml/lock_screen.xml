@@ -4,6 +4,7 @@
     <SwitchPreference
         android:title="@string/lock_screen_rotation"
         android:key="lock_screen_rotation"
+        android:defaultValue="@bool/lock_screen_rotation_default"
         />
 
 </PreferenceScreen>

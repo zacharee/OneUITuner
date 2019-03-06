@@ -6,26 +6,27 @@
         android:title="@string/old_recents"
         android:summary="@string/old_recents_desc"
         android:key="old_recents"
+        android:defaultValue="@bool/old_recents_default"
         />
 
     <tk.zwander.seekbarpreference.SeekBarPreference
         android:title="@string/nav_height"
         android:key="nav_height"
-        android:defaultValue="480"
+        android:defaultValue="@integer/nav_height_unscaled_default"
         app:scale="0.1"
         app:units="dp"
-        app:minValue="0"
-        app:maxValue="1000"
+        app:minValue="@integer/nav_height_min"
+        app:maxValue="@integer/nav_height_max"
         />
 
     <tk.zwander.seekbarpreference.SeekBarPreference
         android:title="@string/status_bar_height"
         android:key="status_bar_height"
-        android:defaultValue="240"
+        android:defaultValue="@integer/status_bar_height_unscaled_default"
         app:scale="0.1"
         app:units="dp"
-        app:minValue="0"
-        app:maxValue="1000"
+        app:minValue="@integer/status_bar_height_min"
+        app:maxValue="@integer/status_height_max"
         />
 
 </PreferenceScreen>

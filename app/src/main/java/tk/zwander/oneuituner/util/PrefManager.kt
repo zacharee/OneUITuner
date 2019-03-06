@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import tk.zwander.oneuituner.R
 
 class PrefManager private constructor(private val context: Context) {
     companion object {
@@ -42,55 +43,55 @@ class PrefManager private constructor(private val context: Context) {
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
     val customClock: Boolean
-        get() = getBoolean(CUSTOM_CLOCK, false)
+        get() = getBoolean(CUSTOM_CLOCK, resourceBool(R.bool.custom_clock_default))
 
     val clockFormat: String
-        get() = getString(CLOCK_FORMAT, "h:mm a")
+        get() = getString(CLOCK_FORMAT, resourceString(R.string.custom_clock_format_default))
 
     val customQsDateFormat: Boolean
-        get() = getBoolean(CUSTOM_QS_DATE_FORMAT, false)
+        get() = getBoolean(CUSTOM_QS_DATE_FORMAT, resourceBool(R.bool.custom_qs_date_default))
 
     val qsDateFormat: String
-        get() = getString(QS_DATE_FORMAT, "EEEMMMMdd")
+        get() = getString(QS_DATE_FORMAT, resourceString(R.string.custom_qs_date_format_default))
 
     val headerCountPortrait: Int
-        get() = getInt(HEADER_COUNT_PORTRAIT, 6)
+        get() = getInt(HEADER_COUNT_PORTRAIT, resourceInt(R.integer.header_count_portrait_default))
 
     val headerCountLandscape: Int
-        get() = getInt(HEADER_COUNT_LANDSCAPE, 10)
+        get() = getInt(HEADER_COUNT_LANDSCAPE, resourceInt(R.integer.header_count_landscape_default))
 
     val qsRowCountPortrait: Int
-        get() = getInt(QS_ROW_COUNT_PORTRAIT, 3)
+        get() = getInt(QS_ROW_COUNT_PORTRAIT, resourceInt(R.integer.qs_row_count_portrait_default))
 
     val qsRowCountLandscape: Int
-        get() = getInt(QS_ROW_COUNT_LANDSCAPE, 2)
+        get() = getInt(QS_ROW_COUNT_LANDSCAPE, resourceInt(R.integer.qs_row_count_landscape_default))
 
     val qsColCountPortrait: Int
-        get() = getInt(QS_COL_COUNT_PORTRAIT, 5)
+        get() = getInt(QS_COL_COUNT_PORTRAIT, resourceInt(R.integer.qs_col_count_portrait_default))
 
     val qsColCountLandscape: Int
-        get() = getInt(QS_COL_COUNT_LANDSCAPE, 8)
+        get() = getInt(QS_COL_COUNT_LANDSCAPE, resourceInt(R.integer.qs_col_count_landscape_default))
 
     val hideQsTileBackground: Boolean
-        get() = getBoolean(HIDE_QS_TILE_BACKGROUND, false)
+        get() = getBoolean(HIDE_QS_TILE_BACKGROUND, resourceBool(R.bool.hide_qs_tile_background_default))
 
     val oldRecents: Boolean
-        get() = getBoolean(OLD_RECENTS, false)
+        get() = getBoolean(OLD_RECENTS, resourceBool(R.bool.old_recents_default))
 
     val navHeight: Float
-        get() = getInt(NAV_HEIGHT, 480) / 10f
+        get() = getInt(NAV_HEIGHT, resourceInt(R.integer.nav_height_unscaled_default)) / 10f
 
     val statusBarHeight: Float
-        get() = getInt(STATUS_BAR_HEIGHT, 240) / 10f
+        get() = getInt(STATUS_BAR_HEIGHT, resourceInt(R.integer.status_bar_height_unscaled_default)) / 10f
 
     val leftSystemIcons: Boolean
-        get() = getBoolean(LEFT_SYSTEM_ICONS, false)
+        get() = getBoolean(LEFT_SYSTEM_ICONS, resourceBool(R.bool.left_system_icons_default))
 
     val hideStatusBarCarrier: Boolean
-        get() = getBoolean(HIDE_STATUS_BAR_CARRIER, false)
+        get() = getBoolean(HIDE_STATUS_BAR_CARRIER, resourceBool(R.bool.hide_status_bar_carrier_default))
 
     val lockScreenRotation: Boolean
-        get() = getBoolean(LOCK_SCREEN_ROTATION, false)
+        get() = getBoolean(LOCK_SCREEN_ROTATION, resourceBool(R.bool.lock_screen_rotation_default))
 
     fun getInt(key: String, def: Int = 0) = prefs.getInt(key, def)
     fun getString(key: String, def: String): String = prefs.getString(key, def) ?: def
@@ -105,4 +106,8 @@ class PrefManager private constructor(private val context: Context) {
 
     fun unregisterOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) =
             prefs.unregisterOnSharedPreferenceChangeListener(listener)
+
+    private fun resourceInt(id: Int) = context.resources.getInteger(id)
+    private fun resourceString(id: Int) = context.resources.getString(id)
+    private fun resourceBool(id: Int) = context.resources.getBoolean(id)
 }

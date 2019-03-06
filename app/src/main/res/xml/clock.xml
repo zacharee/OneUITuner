@@ -6,25 +6,27 @@
         android:title="@string/custom_clock"
         android:summary="@string/custom_clock_desc"
         android:key="custom_clock"
+        android:defaultValue="@bool/custom_clock_default"
         />
 
     <EditTextPreference
         android:title="@string/clock_format"
         android:key="clock_format"
         android:dependency="custom_clock"
-        android:defaultValue="h:mm a"
+        android:defaultValue="@string/custom_clock_format_default"
         />
 
     <SwitchPreference
         android:title="@string/custom_qs_date_format"
         android:key="custom_qs_date_format"
+        android:defaultValue="@bool/custom_qs_date_default"
         />
 
     <EditTextPreference
         android:title="@string/qs_date_format"
         android:key="qs_date_format"
         android:dependency="custom_qs_date_format"
-        android:defaultValue="EEEMMMMdd"
+        android:defaultValue="@string/custom_qs_date_format_default"
         />
 
     <Preference

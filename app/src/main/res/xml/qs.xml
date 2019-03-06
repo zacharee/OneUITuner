@@ -5,17 +5,17 @@
     <tk.zwander.seekbarpreference.SeekBarPreference
         android:title="@string/header_count_portrait"
         android:key="header_count_portrait"
-        android:defaultValue="6"
-        app:minValue="2"
-        app:maxValue="10"
+        android:defaultValue="@integer/header_count_portrait_default"
+        app:minValue="@integer/header_count_portrait_min"
+        app:maxValue="@integer/header_count_portrait_max"
         />
 
     <tk.zwander.seekbarpreference.SeekBarPreference
         android:title="@string/header_count_landscape"
         android:key="header_count_landscape"
-        android:defaultValue="10"
-        app:minValue="2"
-        app:maxValue="18"
+        android:defaultValue="@integer/header_count_landscape_default"
+        app:minValue="@integer/header_count_landscape_min"
+        app:maxValue="@integer/header_count_landscape_max"
         />
 
     <Preference
@@ -26,33 +26,33 @@
     <tk.zwander.seekbarpreference.SeekBarPreference
         android:title="@string/qs_row_count_portrait"
         android:key="qs_row_count_portrait"
-        android:defaultValue="3"
-        app:minValue="2"
-        app:maxValue="5"
+        android:defaultValue="@integer/qs_row_count_portrait_default"
+        app:minValue="@integer/qs_row_count_portrait_min"
+        app:maxValue="@integer/qs_row_count_portrait_max"
         />
 
     <tk.zwander.seekbarpreference.SeekBarPreference
         android:title="@string/qs_row_count_landscape"
         android:key="qs_row_count_landscape"
-        android:defaultValue="2"
-        app:minValue="1"
-        app:maxValue="2"
+        android:defaultValue="@integer/qs_row_count_landscape_default"
+        app:minValue="@integer/qs_row_count_landscape_min"
+        app:maxValue="@integer/qs_row_count_landscape_max"
         />
 
     <tk.zwander.seekbarpreference.SeekBarPreference
         android:title="@string/qs_col_count_portrait"
         android:key="qs_col_count_portrait"
-        android:defaultValue="5"
-        app:minValue="2"
-        app:maxValue="6"
+        android:defaultValue="@integer/qs_col_count_portrait_default"
+        app:minValue="@integer/qs_col_count_portrait_min"
+        app:maxValue="@integer/qs_col_count_portrait_max"
         />
 
     <tk.zwander.seekbarpreference.SeekBarPreference
         android:title="@string/qs_col_count_landscape"
         android:key="qs_col_count_landscape"
-        android:defaultValue="8"
-        app:minValue="2"
-        app:maxValue="15"
+        android:defaultValue="@integer/qs_col_count_landscape_default"
+        app:minValue="@integer/qs_col_count_landscape_min"
+        app:maxValue="@integer/qs_col_count_landscape_max"
         />
 
     <Preference
