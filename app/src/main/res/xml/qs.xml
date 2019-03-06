@@ -34,7 +34,7 @@
         android:key="qs_row_col">
 
         <Preference
-            android:title="@string/qs_row_col_hint"
+            android:summary="@string/qs_row_col_hint"
             android:enabled="false"
             />
 
