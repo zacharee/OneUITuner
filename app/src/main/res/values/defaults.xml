@@ -19,6 +19,6 @@
     <integer name="qs_col_count_landscape_default">8</integer>
     <!-- Scale: 0.1 (480 ==> 48) -->
     <integer name="nav_height_unscaled_default">480</integer>
-    <!--Scale: 0.1 (240 ==> 24) -->
+    <!-- Scale: 0.1 (240 ==> 24) -->
     <integer name="status_bar_height_unscaled_default">240</integer>
 </resources>
