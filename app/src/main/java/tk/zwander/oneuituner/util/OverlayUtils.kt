@@ -24,17 +24,17 @@ fun Context.getResourceXmlFromAsset(folder: String, file: String): String {
 
 fun getManifest(base: File, packageName: String, overlayPkg: String): File {
     val builder = StringBuilder()
-    builder.append("<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"no\"?>")
+    builder.append("<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"no\"?>\n")
     builder.append(
         "<manifest " +
-                "xmlns:android=\"http://schemas.android.com/apk/res/android\" " +
-                "package=\"$overlayPkg\" " +
-                "android:versionCode=\"100\" " +
-                "android:versionName=\"100\"> "
+                "xmlns:android=\"http://schemas.android.com/apk/res/android\"\n" +
+                "package=\"$overlayPkg\"\n" +
+                "android:versionCode=\"100\"\n" +
+                "android:versionName=\"100\">\n"
     )
-    builder.append("<uses-permission android:name=\"com.samsung.android.permission.SAMSUNG_OVERLAY_COMPONENT\" />")
-    builder.append("<overlay android:priority=\"100\" android:targetPackage=\"$packageName\" android:category=\"samsung\" />")
-    builder.append("</manifest>")
+    builder.append("<uses-permission android:name=\"com.samsung.android.permission.SAMSUNG_OVERLAY_COMPONENT\" />\n")
+    builder.append("<overlay android:priority=\"100\" android:targetPackage=\"$packageName\" android:category=\"samsung\" />\n")
+    builder.append("</manifest>\n")
 
     val manifestFile = File(base, "AndroidManifest.xml")
     if (manifestFile.exists()) manifestFile.delete()
@@ -52,14 +52,14 @@ fun makeResourceXml(data: List<ResourceData>) =
 
 fun makeResourceXml(vararg data: ResourceData): String {
     return StringBuilder()
-        .append("<?xml version=\"1.0\" encoding=\"utf-8\"?>")
-        .append("<resources xmlns:android=\"http://schemas.android.com/apk/res/android\">")
+        .append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
+        .append("<resources xmlns:android=\"http://schemas.android.com/apk/res/android\">\n")
         .apply {
             data.forEach {
-                append("<item type=\"${it.type}\" ${it.otherData} name=\"${it.name}\">${it.value}</item>")
+                append("<item type=\"${it.type}\" ${it.otherData} name=\"${it.name}\">${it.value}</item>\n")
             }
         }
-        .append("</resources>")
+        .append("</resources>\n")
         .toString()
 }
 
