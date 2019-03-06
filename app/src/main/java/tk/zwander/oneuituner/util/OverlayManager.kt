@@ -112,6 +112,17 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                                     prefs.qsRowCountLandscape.toString()
                                 )
                             )
+                        ),
+                        ResourceFileData(
+                            "dimens.xml",
+                            "values",
+                            makeResourceXml(
+                                ResourceData(
+                                    "dimen",
+                                    "qs_tile_height_5x3_ratio",
+                                    if (prefs.qsRowCountPortrait > 4) "9.0" else "7.1"
+                                )
+                            )
                         )
                     ).apply {
                         if (prefs.hideQsTileBackground) {
