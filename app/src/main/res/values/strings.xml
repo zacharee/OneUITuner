@@ -6,6 +6,8 @@
     <string name="misc">Miscellaneous</string>
     <string name="status_bar">Status Bar</string>
     <string name="lock_screen">Lock Screen</string>
+    <string name="qs_header">QS Header</string>
+    <string name="qs_row_col">QS Row/Column</string>
 
     <string name="root_required">Root Required</string>
     <string name="succeeded">Succeeded</string>

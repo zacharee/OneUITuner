@@ -28,6 +28,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    packagingOptions {
+        exclude 'META-INF/library_release.kotlin_module'
+    }
 }
 
 dependencies {
@@ -49,6 +53,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'eu.chainfire:librootjava:1.2.0'
     implementation 'com.github.zacharee:SeekBarPreference:d52fbda6a5'
+    implementation 'com.github.zacharee:CollapsiblePreferenceCategory:a8d662ea1c'
 
     implementation 'eu.chainfire:libsuperuser:1.0.0.+'
 }
