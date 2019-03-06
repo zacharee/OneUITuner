@@ -25,6 +25,10 @@
     <string name="status_bar_height">Status Bar Height</string>
     <string name="hide_qs_tile_background">Hide QS Tile Background</string>
     <string name="lock_screen_rotation">Allow Lock Screen Rotation</string>
+    <string name="qs_row_count_portrait">QS Row Count (Portrait)</string>
+    <string name="qs_row_count_landscape">QS Row Count (Landscape)</string>
+    <string name="qs_col_count_portrait">QS Column Count (Portrait)</string>
+    <string name="qs_col_count_landscape">QS Column Count (Landscape)</string>
 
     <string name="root_required_desc">Because of limitations added in later versions of One UI, your device must be rooted to use this app.</string>
     <string name="custom_clock_desc">Replaces Samsung\'s status bar clock with a custom version that allows you to set your own time format.</string>
@@ -33,4 +37,5 @@
     <string name="hide_status_bar_carrier_desc">Hide the carrier label in the status bar on the lock screen and when unlocked. Reboot required.</string>
 
     <string name="qqs_hint">Set your QS grid to 5x3 if the header icons overlap at higher values.</string>
+    <string name="qs_row_col_hint">Set your QS grid to 5x3 for these to take effect.</string>
 </resources>

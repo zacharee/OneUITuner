@@ -74,6 +74,16 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                                     "integer",
                                     "quick_qs_tile_num",
                                     prefs.headerCountPortrait.toString()
+                                ),
+                                ResourceData(
+                                    "integer",
+                                    "qspanel_screen_grid_columns_5",
+                                    prefs.qsColCountPortrait.toString()
+                                ),
+                                ResourceData(
+                                    "integer",
+                                    "qspanel_screen_grid_rows",
+                                    prefs.qsRowCountPortrait.toString()
                                 )
                             )
                         ),
@@ -85,6 +95,16 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                                     "integer",
                                     "quick_qs_tile_num",
                                     prefs.headerCountLandscape.toString()
+                                ),
+                                ResourceData(
+                                    "integer",
+                                    "qspanel_screen_grid_columns_5",
+                                    prefs.qsColCountLandscape.toString()
+                                ),
+                                ResourceData(
+                                    "integer",
+                                    "qspanel_screen_grid_rows",
+                                    prefs.qsRowCountLandscape.toString()
                                 )
                             )
                         )
