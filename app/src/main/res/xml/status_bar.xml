@@ -15,4 +15,11 @@
         android:defaultValue="@bool/hide_status_bar_carrier_default"
         />
 
+    <SwitchPreference
+        android:title="@string/disable_5ge"
+        android:summary="@string/disable_5ge_desc"
+        android:key="disable_5ge"
+        android:defaultValue="@bool/disable_5ge_default"
+        />
+
 </PreferenceScreen>

@@ -31,12 +31,14 @@
     <string name="qs_row_count_landscape">QS Row Count (Landscape)</string>
     <string name="qs_col_count_portrait">QS Column Count (Portrait)</string>
     <string name="qs_col_count_landscape">QS Column Count (Landscape)</string>
+    <string name="disable_5ge">Disable 5G E</string>
 
     <string name="root_required_desc">Because of limitations added in later versions of One UI, your device must be rooted to use this app.</string>
     <string name="custom_clock_desc">Replaces Samsung\'s status bar clock with a custom version that allows you to set your own time format.</string>
     <string name="old_recents_desc">Restores the old vertical Recents carousel. Reboot required.</string>
     <string name="left_system_icons_desc">Move the system icons, like the WiFi, signal, etc icons, to the left of the status bar.</string>
     <string name="hide_status_bar_carrier_desc">Hide the carrier label in the status bar on the lock screen and when unlocked. Reboot required.</string>
+    <string name="disable_5ge_desc">Replaces the 5G E icon on AT&amp;T devices with the proper 4G LTE icon.</string>
 
     <string name="qqs_hint">Set your QS grid to 5x3 if the header icons overlap at higher values.</string>
     <string name="qs_row_col_hint">Set your QS grid to 5x3 for these to take effect.</string>
