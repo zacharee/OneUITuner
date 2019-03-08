@@ -70,24 +70,16 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         val animDuration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
 
-        title_switcher.inAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in).apply { duration =  animDuration}
-        title_switcher.outAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_out).apply { duration = animDuration }
+        title_switcher.inAnimation =
+            AnimationUtils.loadAnimation(this, android.R.anim.fade_in).apply { duration = animDuration }
+        title_switcher.outAnimation =
+            AnimationUtils.loadAnimation(this, android.R.anim.fade_out).apply { duration = animDuration }
         title_switcher.setFactory {
             AppCompatTextView(this).apply {
                 setTextAppearance(android.R.style.TextAppearance_Material_Widget_ActionBar_Title)
                 setTextColor(Color.WHITE)
             }
         }
-
-//        val ldClass = Class.forName("libcore.icu.LocaleData")
-//        val get = ldClass.getMethod("get", Locale::class.java)
-//        val d = get.invoke(null, resources.configuration.locale)
-//
-//        val hms = ldClass.getDeclaredField("timeFormat_hms")
-//            .apply { isAccessible = true }
-//            .get(d)
-//
-//        Log.e("OneUITuner", hms.toString())
 
         if (needsRoot && !Shell.SU.available()) {
             AlertDialog.Builder(this)
@@ -182,7 +174,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         updateFABs()
     }
 
-    fun updateFABs() {
+    private fun updateFABs() {
         val id = currentFrag?.id
         val enabled = id != R.id.main
 
@@ -190,27 +182,16 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         apply_wrapper.animatedVisibility = if (enabled) View.VISIBLE else View.GONE
 
-        when (id) {
-            R.id.main -> {
-                remove_wrapper.animatedVisibility = View.GONE
+        remove_wrapper.animatedVisibility = if (
+            when (id) {
+                R.id.clock -> isInstalled(Keys.clockPkg)
+                R.id.qs -> isInstalled(Keys.qsPkg)
+                R.id.misc -> isInstalled(Keys.miscPkg)
+                R.id.statusBar -> isInstalled(Keys.statusBar)
+                R.id.lockScreen -> isInstalled(Keys.lockScreenPkg)
+                else -> false
             }
-
-            R.id.clock -> {
-                remove_wrapper.animatedVisibility = if (isInstalled(Keys.clockPkg)) View.VISIBLE else View.GONE
-            }
-
-            R.id.qs -> {
-                remove_wrapper.animatedVisibility = if (isInstalled(Keys.qsPkg)) View.VISIBLE else View.GONE
-            }
-
-            R.id.misc -> {
-                remove_wrapper.animatedVisibility = if (isInstalled(Keys.miscPkg)) View.VISIBLE else View.GONE
-            }
-
-            R.id.statusBar -> {
-                remove_wrapper.animatedVisibility = if (isInstalled(Keys.statusBarPkg)) View.VISIBLE else View.GONE
-            }
-        }
+        ) View.VISIBLE else View.GONE
     }
 
     private var RelativeLayout.animatedVisibility: Int

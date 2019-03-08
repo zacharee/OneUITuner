@@ -2,11 +2,12 @@ package tk.zwander.oneuituner.util
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import tk.zwander.oneuituner.R
 
-class PrefManager private constructor(private val context: Context) {
+class PrefManager private constructor(context: Context) : ContextWrapper(context) {
     companion object {
         @SuppressLint("StaticFieldLeak")
         private var instance: PrefManager? = null
@@ -40,7 +41,7 @@ class PrefManager private constructor(private val context: Context) {
         const val LOCK_SCREEN_ROTATION = "lock_screen_rotation"
     }
 
-    private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+    private val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
     val customClock: Boolean
         get() = getBoolean(CUSTOM_CLOCK, resourceBool(R.bool.custom_clock_default))
@@ -107,7 +108,7 @@ class PrefManager private constructor(private val context: Context) {
     fun unregisterOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) =
             prefs.unregisterOnSharedPreferenceChangeListener(listener)
 
-    private fun resourceInt(id: Int) = context.resources.getInteger(id)
-    private fun resourceString(id: Int) = context.resources.getString(id)
-    private fun resourceBool(id: Int) = context.resources.getBoolean(id)
+    private fun resourceInt(id: Int) = resources.getInteger(id)
+    private fun resourceString(id: Int) = resources.getString(id)
+    private fun resourceBool(id: Int) = resources.getBoolean(id)
 }
