@@ -10,6 +10,7 @@ import eu.chainfire.libsuperuser.Shell
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import tk.zwander.oneuituner.root.RootStuff
+import tk.zwander.oneuituner.util.loggedSu
 
 class App : Application() {
     val ipcReceiver by lazy { IPCReceiverImpl(this, 100) }
@@ -53,10 +54,17 @@ class App : Application() {
                 }
             }
 
+        val suRunner = object : SuRunner.Stub() {
+            override fun run(command: String) {
+                loggedSu(command)
+            }
+        }
+
         private var queuedActions = ArrayList<(RootBridge) -> Unit>()
 
         override fun onConnect(ipc: RootBridge?) {
             this.ipc = ipc
+            this.ipc!!.setSuRunner(suRunner)
         }
 
         override fun onDisconnect(ipc: RootBridge?) {

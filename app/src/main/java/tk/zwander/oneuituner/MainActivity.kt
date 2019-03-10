@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         when (intent?.action) {
             WorkaroundInstaller.ACTION_FINISHED -> {
                 val status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -100)
-//                val message: String? = intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE)
+                val message: String? = intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE)
 
                 progress_apply.visibility = View.GONE
                 progress_remove.visibility = View.GONE
@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         if (!Shell.SU.available()) {
             workaroundInstaller.installPackage(uri, apk.name)
         } else {
-            app.ipcReceiver.postIPCAction { it.installPkg(apk.absolutePath, apk.name) }
+            app.ipcReceiver.postIPCAction { it.installPkg(apk.absolutePath, apk.nameWithoutExtension) }
         }
     }
 
@@ -187,7 +187,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 R.id.clock -> isInstalled(Keys.clockPkg)
                 R.id.qs -> isInstalled(Keys.qsPkg)
                 R.id.misc -> isInstalled(Keys.miscPkg)
-                R.id.statusBar -> isInstalled(Keys.statusBar)
+                R.id.statusBar -> isInstalled(Keys.statusBarPkg)
                 R.id.lockScreen -> isInstalled(Keys.lockScreenPkg)
                 else -> false
             }

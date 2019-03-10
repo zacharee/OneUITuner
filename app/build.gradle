@@ -49,7 +49,7 @@ dependencies {
     implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0-rc02'
 
     implementation 'com.github.zacharee:colorpicker:040874fb27'
-    implementation 'com.github.topjohnwu:libsu:2.2.0'
+//    implementation 'com.github.topjohnwu:libsu:2.2.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'eu.chainfire:librootjava:1.2.0'
     implementation 'com.github.zacharee:SeekBarPreference:d52fbda6a5'

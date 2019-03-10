@@ -358,7 +358,6 @@ fun Context.compileOverlay(manifest: File, overlayFile: File, resFile: File, tar
         .toString()
 
     Shell.run("sh", arrayOf(aaptCmd), null, true)
-        .apply { Log.e("OneUITuner", toString()) }
     Shell.SH.run("chmod 777 ${overlayFile.absolutePath}")
 }
 

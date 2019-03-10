@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Build
+import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
@@ -59,6 +60,7 @@ fun Context.isInstalled(packageName: String) =
             packageManager.getPackageInfo(packageName, 0)
             true
         } catch (e: Exception) {
+            Log.e("OneUITuner", e.message)
             false
         }
 
@@ -98,3 +100,14 @@ val completionIntent: Intent
     get() = Intent(WorkaroundInstaller.ACTION_FINISHED).apply {
         component = ComponentName(BuildConfig.APPLICATION_ID, "${BuildConfig.APPLICATION_ID}.MainActivity")
     }
+
+fun Context.broadcastFinish(intent: Intent) {
+    intent.component = ComponentName(BuildConfig.APPLICATION_ID, "${BuildConfig.APPLICATION_ID}.FinishReceiver")
+    sendBroadcast(intent)
+}
+
+fun loggedSu(command: String) {
+    Log.e("OneUITuner", command)
+    Shell.run("su", arrayOf(command), null, true)
+        .apply { Log.e("OneUITuner", this?.toString() ?: "null") }
+}

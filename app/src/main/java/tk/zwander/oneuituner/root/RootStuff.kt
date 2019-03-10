@@ -2,18 +2,20 @@ package tk.zwander.oneuituner.root
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageInstaller
 import android.os.IBinder
-import com.topjohnwu.superuser.io.SuFile
 import eu.chainfire.librootjava.RootIPC
 import eu.chainfire.librootjava.RootJava
-import eu.chainfire.libsuperuser.Shell
 import tk.zwander.oneuituner.BuildConfig
 import tk.zwander.oneuituner.RootBridge
+import tk.zwander.oneuituner.SuRunner
 import tk.zwander.oneuituner.util.WorkaroundInstaller
-import tk.zwander.oneuituner.util.completionIntent
+import tk.zwander.oneuituner.util.broadcastFinish
 import tk.zwander.oneuituner.util.needsRoot
+import java.io.File
 import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 @SuppressLint("StaticFieldLeak")
 object RootStuff {
@@ -47,6 +49,12 @@ object RootStuff {
             asInterface.invoke(null, binder)
         }
 
+        var su: SuRunner? = null
+
+        override fun setSuRunner(runner: SuRunner?) {
+            su = runner
+        }
+
         override fun reboot(reason: String) {
             iPMClass.getMethod("reboot", Boolean::class.java, String::class.java, Boolean::class.java)
                 .invoke(pm, false, reason, true)
@@ -54,31 +62,30 @@ object RootStuff {
 
         override fun installPkg(path: String, name: String) {
             if (needsRoot) {
-                val intent = completionIntent
+                val intent = Intent(WorkaroundInstaller.ACTION_FINISHED)
 
                 try {
-                    Shell.SU.run("mount -o rw,remount /system")
+                    su?.run("mount -o rw,remount /system")
 
-                    val src = SuFile(path)
-                    val dstDir = SuFile("/system/app/$name")
+                    val src = File(path)
+                    val dstDir = File("/system/app/$name")
 
-                    if (!dstDir.exists()) {
-                        dstDir.mkdirs()
-                    }
+                    dstDir.mkdir()
 
-                    val dstFile = SuFile(dstDir, "$name.apk")
+                    val dstFile = File(dstDir, "$name.apk")
 
-                    Files.copy(src.toPath(), dstFile.toPath())
+                    Files.copy(src.toPath(), dstFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
 
-                    Shell.SU.run("mount -o ro,remount /system")
+                    su?.run("mount -o ro,remount /system")
 
-                    intent.putExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_SUCCESS)
+                    workaroundInstaller.installPackage(dstFile.absolutePath, name)
                 } catch (e: Exception) {
                     intent.putExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE)
                     intent.putExtra(PackageInstaller.EXTRA_STATUS_MESSAGE, e.message)
+
+                    context.broadcastFinish(intent)
                 }
 
-                context.startActivity(intent)
             } else {
                 workaroundInstaller.installPackage(path, name)
             }
@@ -86,25 +93,25 @@ object RootStuff {
 
         override fun uninstallPkg(pkg: String) {
             if (needsRoot) {
-                val intent = completionIntent
+                val intent = Intent(WorkaroundInstaller.ACTION_FINISHED)
 
                 try {
-                    Shell.SU.run("mount -o rw,remount /system")
+                    su?.run("mount -o rw,remount /system")
 
                     val path = context.packageManager.getPackageInfo(pkg, 0)
                         .applicationInfo.sourceDir
 
-                    SuFile(path).parentFile.deleteRecursively()
+                    su?.run("rm -rf ${File(path).parentFile.absolutePath}")
 
-                    Shell.SU.run("mount -o ro,remount /system")
+                    su?.run("mount -o ro,remount /system")
 
-                    intent.putExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_SUCCESS)
+                    workaroundInstaller.uninstallPackage(pkg)
                 } catch (e: Exception) {
                     intent.putExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE)
                     intent.putExtra(PackageInstaller.EXTRA_STATUS_MESSAGE, e.message)
-                }
 
-                context.startActivity(intent)
+                    context.broadcastFinish(intent)
+                }
             } else {
                 workaroundInstaller.uninstallPackage(pkg)
             }
