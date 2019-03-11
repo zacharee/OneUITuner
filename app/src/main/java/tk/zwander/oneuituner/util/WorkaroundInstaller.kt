@@ -55,7 +55,10 @@ class WorkaroundInstaller private constructor(context: Context) : ContextWrapper
         val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL)
             .apply {
                 val installParamsField = this::class.java.getField("installFlags")
-                installParamsField.set(this, flags)
+                installParamsField.set(this, 0x10)
+
+                val volumeUuidField = this::class.java.getField("volumeUuid")
+                volumeUuidField.set(this, "system")
             }
         val sessionId = packageInstaller.createSession(params)
         val session = packageInstaller.openSession(sessionId)

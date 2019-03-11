@@ -119,7 +119,13 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                                 ResourceData(
                                     "dimen",
                                     "qs_tile_height_5x3_ratio",
-                                    if (prefs.qsRowCountPortrait > 4) "9.0" else "7.1"
+                                    prefs.qsRowCountPortrait.run {
+                                        when {
+                                            this > 3 -> "8.0"
+                                            this > 4 -> "9.0"
+                                            else -> "7.1"
+                                        }
+                                    }
                                 )
                             )
                         )
