@@ -121,9 +121,45 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                                     "qs_tile_height_5x3_ratio",
                                     prefs.qsRowCountPortrait.run {
                                         when {
+                                            this > 4 -> "9.5"
                                             this > 3 -> "8.0"
-                                            this > 4 -> "9.0"
                                             else -> "7.1"
+                                        }
+                                    }
+                                ),
+                                ResourceData(
+                                    "dimen",
+                                    "qs_tile_icon_size_5x3_ratio",
+                                    prefs.qsRowCountPortrait.run {
+                                        when {
+                                            this > 4 -> "21.0"
+                                            else -> "19.43"
+                                        }
+                                    }
+                                ),
+                                ResourceData(
+                                    "dimen",
+                                    "qs_tile_text_size",
+                                    prefs.qsRowCountPortrait.run {
+                                        when {
+                                            this > 4 -> "12sp"
+                                            else -> "13sp"
+                                        }
+                                    }
+                                )
+                            )
+                        ),
+                        ResourceFileData(
+                            "dimens.xml",
+                            "values-sw410dp",
+                            makeResourceXml(
+                                ResourceData(
+                                    "dimen",
+                                    "qs_tile_text_size",
+                                    prefs.qsRowCountPortrait.run {
+                                        when {
+                                            this > 4 -> "13sp"
+                                            else -> "14sp"
                                         }
                                     }
                                 )

@@ -87,7 +87,6 @@ object RootStuff {
 
                     context.broadcastFinish(intent)
                 }
-
             } else {
                 workaroundInstaller.installPackage(path, name)
             }
