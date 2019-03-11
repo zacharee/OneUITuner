@@ -275,7 +275,20 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                                         "drawable",
                                         StringBuilder()
                                             .append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
-                                            .append("<bitmap xmlns:android=\"https://schemas.android.com/apk/res/android\n\" android:src=\"@drawable/stat_sys_data_connected_lte_att\" />\n")
+                                            .append("<bitmap xmlns:android=\"https://schemas.android.com/apk/res/android\" android:src=\"@drawable/stat_sys_data_connected_lte_att\" />\n")
+                                            .toString()
+                                    )
+                                )
+                            }
+
+                            if (prefs.disableFlashingWiFi) {
+                                add(
+                                    ResourceFileData(
+                                        "stat_sys_wifi_signal_checking",
+                                        "drawable",
+                                        StringBuilder()
+                                            .append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
+                                            .append("<bitmap xmlns:android=\"https://schemas.android.com/apk/res/android\" android:src=\"@drawable/stat_sys_wifi_signal_checking_dim\" />\n")
                                             .toString()
                                     )
                                 )

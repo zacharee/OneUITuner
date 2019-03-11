@@ -38,6 +38,7 @@ class PrefManager private constructor(context: Context) : ContextWrapper(context
         const val LEFT_SYSTEM_ICONS = "left_system_icons"
         const val HIDE_STATUS_BAR_CARRIER = "hide_status_bar_carrier"
         const val DISABLE_5GE = "disable_5ge"
+        const val DISABLE_FLASHING_WIFI = "disable_flashing_wifi"
 
         const val LOCK_SCREEN_ROTATION = "lock_screen_rotation"
     }
@@ -94,6 +95,9 @@ class PrefManager private constructor(context: Context) : ContextWrapper(context
 
     val disable5ge: Boolean
         get() = getBoolean(DISABLE_5GE, resourceBool(R.bool.disable_5ge_default))
+
+    val disableFlashingWiFi: Boolean
+        get() = getBoolean(DISABLE_FLASHING_WIFI, resourceBool(R.bool.disable_flashing_wifi_default))
 
     val lockScreenRotation: Boolean
         get() = getBoolean(LOCK_SCREEN_ROTATION, resourceBool(R.bool.lock_screen_rotation_default))

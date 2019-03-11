@@ -32,6 +32,7 @@
     <string name="qs_col_count_portrait">QS Column Count (Portrait)</string>
     <string name="qs_col_count_landscape">QS Column Count (Landscape)</string>
     <string name="disable_5ge">Disable 5G E</string>
+    <string name="disable_flashing_wifi">Disable Flashing WiFi Icon</string>
 
     <string name="root_required_desc">Because of limitations added in later versions of One UI, your device must be rooted to use this app.</string>
     <string name="custom_clock_desc">Replaces Samsung\'s status bar clock with a custom version that allows you to set your own time format.</string>

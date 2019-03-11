@@ -22,4 +22,10 @@
         android:defaultValue="@bool/disable_5ge_default"
         />
 
+    <SwitchPreference
+        android:title="@string/disable_flashing_wifi"
+        android:key="disable_flashing_wifi"
+        android:defaultValue="@bool/disable_flashing_wifi_default"
+        />
+
 </PreferenceScreen>
