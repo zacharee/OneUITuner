@@ -10,6 +10,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageInstaller
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils

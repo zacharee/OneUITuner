@@ -17,6 +17,8 @@ import tk.zwander.oneuituner.App
 import tk.zwander.oneuituner.BuildConfig
 import tk.zwander.oneuituner.R
 import java.io.File
+import java.io.PrintWriter
+import java.io.StringWriter
 
 
 val Context.aapt: String?
@@ -60,7 +62,6 @@ fun Context.isInstalled(packageName: String) =
             packageManager.getPackageInfo(packageName, 0)
             true
         } catch (e: Exception) {
-            Log.e("OneUITuner", e.message)
             false
         }
 
@@ -110,4 +111,18 @@ fun loggedSu(command: String) {
     Log.e("OneUITuner", command)
     Shell.run("su", arrayOf(command), null, true)
         .apply { Log.e("OneUITuner", this?.toString() ?: "null") }
+}
+
+fun loggedSh(command: String) {
+    Log.e("OneUITuner", command)
+    Shell.run("sh", arrayOf(command), null, true)
+        .apply { Log.e("OneUITuner", this?.toString() ?: "null") }
+}
+
+fun Exception.log() {
+    val writer = StringWriter().apply {
+        printStackTrace(PrintWriter(this))
+    }
+
+    Log.e("OneUITuner", writer.toString())
 }

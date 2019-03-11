@@ -12,6 +12,7 @@ import tk.zwander.oneuituner.RootBridge
 import tk.zwander.oneuituner.SuRunner
 import tk.zwander.oneuituner.util.WorkaroundInstaller
 import tk.zwander.oneuituner.util.broadcastFinish
+import tk.zwander.oneuituner.util.log
 import tk.zwander.oneuituner.util.needsRoot
 import java.io.File
 import java.nio.file.Files
@@ -80,6 +81,7 @@ object RootStuff {
 
                     workaroundInstaller.installPackage(dstFile.absolutePath, name)
                 } catch (e: Exception) {
+                    e.log()
                     intent.putExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE)
                     intent.putExtra(PackageInstaller.EXTRA_STATUS_MESSAGE, e.message)
 

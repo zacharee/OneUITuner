@@ -3,7 +3,6 @@ package tk.zwander.oneuituner.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
-import android.util.Log
 import com.android.apksig.ApkSigner
 import eu.chainfire.libsuperuser.Shell
 import kotlinx.coroutines.GlobalScope
@@ -357,7 +356,7 @@ fun Context.compileOverlay(manifest: File, overlayFile: File, resFile: File, tar
         .append(overlayFile)
         .toString()
 
-    Shell.run("sh", arrayOf(aaptCmd), null, true)
+    loggedSh(aaptCmd)
     Shell.SH.run("chmod 777 ${overlayFile.absolutePath}")
 }
 
