@@ -3,6 +3,7 @@ package tk.zwander.oneuituner
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.LayoutTransition
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -10,7 +11,6 @@ import android.content.IntentFilter
 import android.content.pm.PackageInstaller
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -19,13 +19,16 @@ import android.view.animation.OvershootInterpolator
 import android.widget.ImageButton
 import android.widget.RelativeLayout
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.FileProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import eu.chainfire.libsuperuser.Shell
+import com.samsungthemelib.ui.Installer
+import com.samsungthemelib.ui.PermissionsActivity
+import com.samsungthemelib.util.compiler
+import com.samsungthemelib.util.moveToInputDir
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tk.zwander.oneuituner.util.*
@@ -39,9 +42,23 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     private val backButton by lazy { createBackButton() }
 
+    private val resultReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            progress_apply.visibility = View.GONE
+            progress_remove.visibility = View.GONE
+
+            val status = intent?.getIntExtra(PackageInstaller.EXTRA_STATUS, -100)
+            val success = status == PackageInstaller.STATUS_SUCCESS
+
+            Toast.makeText(this@MainActivity, if (success) R.string.succeeded else R.string.failed, Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        PermissionsActivity.requestForResult(this, PermissionsActivity.REQ_PERMISSIONS, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
         overlayReceiver.register()
 
@@ -82,47 +99,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
         }
 
-        if (needsRoot && !Shell.SU.available()) {
-            AlertDialog.Builder(this)
-                .setTitle(R.string.root_required)
-                .setMessage(R.string.root_required_desc)
-                .setCancelable(false)
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    finish()
-                }
-                .show()
-        }
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-
-        when (intent?.action) {
-            WorkaroundInstaller.ACTION_FINISHED -> {
-                val status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -100)
-                val message: String? = intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE)
-
-                progress_apply.visibility = View.GONE
-                progress_remove.visibility = View.GONE
-
-                when (status) {
-                    PackageInstaller.STATUS_PENDING_USER_ACTION -> {
-                        val confirmIntent = intent.extras?.get(Intent.EXTRA_INTENT) as Intent?
-                        startActivity(confirmIntent)
-                    }
-
-                    PackageInstaller.STATUS_SUCCESS -> {
-                        Toast.makeText(this, R.string.succeeded, Toast.LENGTH_SHORT).show()
-                        updateFABs()
-                    }
-
-                    PackageInstaller.STATUS_FAILURE -> {
-                        Toast.makeText(this, R.string.failed, Toast.LENGTH_SHORT).show()
-                        updateFABs()
-                    }
-                }
-            }
-        }
+        LocalBroadcastManager.getInstance(this).registerReceiver(resultReceiver, IntentFilter(Installer.ACTION_PACKAGE_RESULT))
     }
 
     override fun invoke(apk: File) {
@@ -132,10 +109,10 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             apk
         )
 
-        if (!Shell.SU.available()) {
-            workaroundInstaller.installPackage(uri, apk.name)
-        } else {
-            app.ipcReceiver.postIPCAction { it.installPkg(apk.absolutePath, apk.nameWithoutExtension) }
+        moveToInputDir(apk)
+
+        compiler.compileAsync {
+            Installer.install(this, it)
         }
     }
 
@@ -167,12 +144,23 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         overlayReceiver.unregister()
         navController.removeOnDestinationChangedListener(this)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(resultReceiver)
     }
 
     override fun onResume() {
         super.onResume()
 
         updateFABs()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            PermissionsActivity.REQ_PERMISSIONS -> {
+                if (resultCode != Activity.RESULT_OK) finish()
+            }
+        }
     }
 
     private fun updateFABs() {

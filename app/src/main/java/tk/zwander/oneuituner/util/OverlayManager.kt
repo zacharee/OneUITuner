@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
 import com.android.apksig.ApkSigner
+import com.samsungthemelib.util.removePart
 import eu.chainfire.libsuperuser.Shell
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -338,11 +339,7 @@ fun Context.uninstall(which: String) {
         else -> return
     }
 
-    if (Shell.SU.available()) {
-        app.ipcReceiver.postIPCAction { it.uninstallPkg(pkg) }
-    } else {
-        workaroundInstaller.uninstallPackage(pkg)
-    }
+    removePart(pkg)
 }
 
 fun Context.doCompileAlignAndSign(

@@ -1,9 +1,7 @@
 package tk.zwander.oneuituner.util
 
 import android.app.Activity
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.util.Log
@@ -14,7 +12,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceFragmentCompat
 import eu.chainfire.libsuperuser.Shell
 import tk.zwander.oneuituner.App
-import tk.zwander.oneuituner.BuildConfig
 import tk.zwander.oneuituner.R
 import java.io.File
 import java.io.PrintWriter
@@ -54,9 +51,6 @@ val Context.app: App
 val Context.prefs: PrefManager
     get() = PrefManager.getInstance(this)
 
-val Context.workaroundInstaller: WorkaroundInstaller
-    get() = WorkaroundInstaller.getInstance(this)
-
 fun Context.isInstalled(packageName: String) =
         try {
             packageManager.getPackageInfo(packageName, 0)
@@ -76,7 +70,7 @@ val navOptions: NavOptions
         .setPopExitAnim(android.R.anim.fade_out)
         .build()
 
-val needsRoot: Boolean
+val needsThemeCenter: Boolean
     get() {
         val df = SimpleDateFormat("YYYY-MM-DD")
         val compDate = df.parse("2019-02-01")
@@ -96,16 +90,6 @@ val String.isValidClockFormat: Boolean
     } catch (e: Exception) {
         false
     }
-
-val completionIntent: Intent
-    get() = Intent(WorkaroundInstaller.ACTION_FINISHED).apply {
-        component = ComponentName(BuildConfig.APPLICATION_ID, "${BuildConfig.APPLICATION_ID}.MainActivity")
-    }
-
-fun Context.broadcastFinish(intent: Intent) {
-    intent.component = ComponentName(BuildConfig.APPLICATION_ID, "${BuildConfig.APPLICATION_ID}.FinishReceiver")
-    sendBroadcast(intent)
-}
 
 fun loggedSu(command: String) {
     Log.e("OneUITuner", command)
