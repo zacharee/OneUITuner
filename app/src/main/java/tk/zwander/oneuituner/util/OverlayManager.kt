@@ -333,6 +333,7 @@ fun Context.uninstall(which: String) {
         Keys.clock -> Keys.clockPkg
         Keys.qs -> Keys.qsPkg
         Keys.misc -> Keys.miscPkg
+        Keys.lockScreen -> Keys.lockScreenPkg
         Keys.statusBar -> Keys.statusBarPkg
         else -> return
     }

@@ -20,17 +20,20 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <receiver
-            android:name=".FinishReceiver"
-            android:enabled="true"
-            android:exported="true"></receiver>
+                android:name=".FinishReceiver"
+                android:enabled="true"
+                android:exported="true"
+        />
 
         <activity
             android:name=".MainActivity"
             android:launchMode="singleInstance">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"
+                />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"
+                />
             </intent-filter>
         </activity>
 
@@ -41,7 +44,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
+                android:resource="@xml/provider_paths"
+            />
         </provider>
     </application>
 
