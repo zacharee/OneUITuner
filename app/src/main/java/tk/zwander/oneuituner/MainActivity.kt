@@ -21,14 +21,14 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.FileProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import com.samsungthemelib.ui.Installer
 import com.samsungthemelib.ui.PermissionsActivity
-import com.samsungthemelib.util.compiler
+import com.samsungthemelib.util.compileAndInstall
 import com.samsungthemelib.util.moveToInputDir
+import com.samsungthemelib.util.needsThemeCenter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tk.zwander.oneuituner.util.*
@@ -103,16 +103,11 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     override fun invoke(apk: File) {
-        val uri = FileProvider.getUriForFile(
-            this,
-            "$packageName.apkprovider",
-            apk
-        )
-
-        moveToInputDir(apk)
-
-        compiler.compileAsync {
-            Installer.install(this, it)
+        if (needsThemeCenter) {
+            moveToInputDir(apk)
+            compileAndInstall()
+        } else {
+            Installer.install(this, apk)
         }
     }
 

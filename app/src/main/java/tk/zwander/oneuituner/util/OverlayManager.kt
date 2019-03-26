@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
 import com.android.apksig.ApkSigner
+import com.samsungthemelib.ui.Installer
+import com.samsungthemelib.util.needsThemeCenter
 import com.samsungthemelib.util.removePart
 import eu.chainfire.libsuperuser.Shell
 import kotlinx.coroutines.GlobalScope
@@ -339,7 +341,11 @@ fun Context.uninstall(which: String) {
         else -> return
     }
 
-    removePart(pkg)
+    if (needsThemeCenter) {
+        removePart(pkg)
+    } else {
+        Installer.uninstall(this, pkg)
+    }
 }
 
 fun Context.doCompileAlignAndSign(

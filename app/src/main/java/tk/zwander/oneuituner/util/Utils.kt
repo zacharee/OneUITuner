@@ -9,6 +9,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceFragmentCompat
+import com.samsungthemelib.util.isPartActive
+import com.samsungthemelib.util.isPartInstalled
+import com.samsungthemelib.util.needsThemeCenter
 import eu.chainfire.libsuperuser.Shell
 import tk.zwander.oneuituner.App
 import tk.zwander.oneuituner.R
@@ -51,12 +54,8 @@ val Context.prefs: PrefManager
     get() = PrefManager.getInstance(this)
 
 fun Context.isInstalled(packageName: String) =
-        try {
-            packageManager.getPackageInfo(packageName, 0)
-            true
-        } catch (e: Exception) {
-            false
-        }
+        if (needsThemeCenter) isPartInstalled(packageName)
+        else isPartActive(packageName)
 
 val PreferenceFragmentCompat.navController: NavController
     get() = NavHostFragment.findNavController(this)
