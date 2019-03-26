@@ -2,11 +2,13 @@ package tk.zwander.oneuituner.util
 
 import android.content.Context
 import android.content.res.AssetManager
+import com.samsungthemelib.util.transferAndClose
 import eu.chainfire.libsuperuser.Shell
 import tk.zwander.oneuituner.data.ResourceData
-import java.io.*
-import javax.crypto.Cipher
-import javax.crypto.CipherInputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStreamWriter
 
 fun Context.getResourceXmlFromAsset(folder: String, file: String): String {
     return assets.open("$folder/$file")
@@ -90,11 +92,11 @@ fun Context.makeBaseDir(suffix: String): File {
     return dir
 }
 
-fun AssetManager.extractAsset(assetPath: String, devicePath: String, cipher: Cipher?): Boolean {
+fun AssetManager.extractAsset(assetPath: String, devicePath: String): Boolean {
     try {
         val files = list(assetPath) ?: emptyArray()
         if (files.isEmpty()) {
-            return handleExtractAsset(this, assetPath, devicePath, cipher)
+            return handleExtractAsset(this, assetPath, devicePath)
         }
         val f = File(devicePath)
         if (!f.exists() && !f.mkdirs()) {
@@ -104,9 +106,9 @@ fun AssetManager.extractAsset(assetPath: String, devicePath: String, cipher: Cip
         for (file in files) {
             val assetList = list("$assetPath/$file") ?: emptyArray()
             res = if (assetList.isEmpty()) {
-                res and handleExtractAsset(this, "$assetPath/$file", "$devicePath/$file", cipher)
+                res and handleExtractAsset(this, "$assetPath/$file", "$devicePath/$file")
             } else {
-                res and extractAsset("$assetPath/$file", "$devicePath/$file", cipher)
+                res and extractAsset("$assetPath/$file", "$devicePath/$file")
             }
         }
         return res
@@ -116,50 +118,19 @@ fun AssetManager.extractAsset(assetPath: String, devicePath: String, cipher: Cip
     }
 }
 
-fun AssetManager.extractAsset(assetPath: String, devicePath: String): Boolean {
-    return extractAsset(assetPath, devicePath, null)
-}
-
 private fun handleExtractAsset(
-    am: AssetManager, assetPath: String, devicePath: String,
-    cipher: Cipher?
+    am: AssetManager, assetPath: String, devicePath: String
 ): Boolean {
-    var path = devicePath
-    var `in`: InputStream? = null
-    var out: OutputStream? = null
-    val parent = File(path).parentFile
+    val parent = File(devicePath).parentFile
     if (!parent.exists() && !parent.mkdirs()) {
         throw RuntimeException("cannot create directory: " + parent.absolutePath)
     }
 
-    if (path.endsWith(".enc")) {
-        path = path.substring(0, path.lastIndexOf("."))
-    }
-
-    try {
-        `in` = if (cipher != null && assetPath.endsWith(".enc")) {
-            CipherInputStream(am.open(assetPath), cipher)
-        } else {
-            am.open(assetPath)
-        }
-        out = FileOutputStream(File(path))
-        val bytes = ByteArray(DEFAULT_BUFFER_SIZE)
-        var len: Int = `in`!!.read(bytes)
-        while (len != -1) {
-            out.write(bytes, 0, len)
-            len = `in`.read(bytes)
-        }
-        return true
+    return try {
+        transferAndClose(am.open(assetPath), FileOutputStream(File(devicePath)))
+        true
     } catch (e: IOException) {
         e.printStackTrace()
-        return false
-    } finally {
-        try {
-            `in`?.close()
-            out?.close()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
+        false
     }
 }
