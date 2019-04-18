@@ -1,29 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <Preference
-        android:title="@string/clock"
-        android:key="clock"
-        />
+    <PreferenceCategory
+        android:title="@string/options">
 
-    <Preference
-        android:title="@string/qs"
-        android:key="qs"
-        />
+        <Preference
+            android:title="@string/clock"
+            android:key="clock"
+            />
 
-    <Preference
-        android:title="@string/status_bar"
-        android:key="status_bar"
-        />
+        <Preference
+            android:title="@string/qs"
+            android:key="qs"
+            />
 
-    <Preference
-        android:title="@string/lock_screen"
-        android:key="lock_screen"
-        />
+        <Preference
+            android:title="@string/status_bar"
+            android:key="status_bar"
+            />
 
-    <Preference
-        android:title="@string/misc"
-        android:key="misc"
-        />
+        <Preference
+            android:title="@string/lock_screen"
+            android:key="lock_screen"
+            />
+
+        <Preference
+            android:title="@string/misc"
+            android:key="misc"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/other">
+
+        <SwitchPreference
+            android:title="@string/activate_trial_killer"
+            android:summary="@string/activate_trial_killer_desc"
+            android:key="activate_trial_killer"
+            />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>
