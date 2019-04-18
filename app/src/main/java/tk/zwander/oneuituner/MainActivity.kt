@@ -27,6 +27,7 @@ import androidx.navigation.NavDestination
 import com.samsungthemelib.ui.Installer
 import com.samsungthemelib.ui.PermissionsActivity
 import com.samsungthemelib.util.compileAndInstall
+import com.samsungthemelib.util.createShellLauncher
 import com.samsungthemelib.util.moveToInputDir
 import com.samsungthemelib.util.needsThemeCenter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -59,6 +60,8 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         setContentView(R.layout.activity_main)
 
         PermissionsActivity.requestForResult(this, PermissionsActivity.REQ_PERMISSIONS, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+        createShellLauncher()
 
         overlayReceiver.register()
 

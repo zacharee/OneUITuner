@@ -1,11 +1,11 @@
 package tk.zwander.oneuituner
 
-import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import com.samsungthemelib.ThemeLibApp
 
-class App : Application() {
+class App : ThemeLibApp() {
     val nm by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
     override fun onCreate() {

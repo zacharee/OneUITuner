@@ -60,8 +60,8 @@ fun Context.isInstalled(packageName: String) =
 val PreferenceFragmentCompat.navController: NavController
     get() = NavHostFragment.findNavController(this)
 
-val navOptions: NavOptions
-    get() = NavOptions.Builder()
+val navOptions =
+    NavOptions.Builder()
         .setEnterAnim(android.R.anim.fade_in)
         .setExitAnim(android.R.anim.fade_out)
         .setPopEnterAnim(android.R.anim.fade_in)
