@@ -135,8 +135,8 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                                     "qs_tile_icon_size_5x3_ratio",
                                     prefs.qsRowCountPortrait.run {
                                         when {
-                                            this > 4 -> "21.0"
-                                            else -> "19.43"
+                                            this > 4 -> if (!needsThemeCenter) "21.0" else "3.0"
+                                            else -> if (!needsThemeCenter) "19.43" else "2.73"
                                         }
                                     }
                                 ),
@@ -178,6 +178,49 @@ fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
                                         ResourceData(
                                             "color",
                                             "qs_tile_round_background_on",
+                                            "@android:color/transparent"
+                                        ),
+                                        ResourceData(
+                                            "color",
+                                            "qs_tile_round_background_off",
+                                            "@android:color/transparent"
+                                        ),
+                                        ResourceData(
+                                            "color",
+                                            "qs_tile_round_background_dim",
+                                            "@android:color/transparent"
+                                        ),
+                                        ResourceData(
+                                            "color",
+                                            "qs_tile_round_bottom_background",
+                                            "@android:color/transparent"
+                                        ),
+                                        ResourceData(
+                                            "color",
+                                            "qs_tile_round_background_image",
+                                            "@android:color/transparent"
+                                        )
+                                    )
+                                )
+                            )
+                            add(
+                                ResourceFileData(
+                                    "colors.xml",
+                                    "values-night",
+                                    makeResourceXml(
+                                        ResourceData(
+                                            "color",
+                                            "qs_tile_round_background_off",
+                                            "@android:color/transparent"
+                                        ),
+                                        ResourceData(
+                                            "color",
+                                            "qs_tile_round_background_dim",
+                                            "@android:color/transparent"
+                                        ),
+                                        ResourceData(
+                                            "color",
+                                            "qs_tile_round_bottom_background",
                                             "@android:color/transparent"
                                         )
                                     )
