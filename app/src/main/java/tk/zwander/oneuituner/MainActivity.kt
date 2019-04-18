@@ -19,6 +19,7 @@ import android.view.animation.OvershootInterpolator
 import android.widget.ImageButton
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.navigation.NavController
@@ -45,14 +46,19 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val status = data.status
         val success = status == PackageInstaller.STATUS_SUCCESS
 
-        Toast.makeText(this@MainActivity, if (success) R.string.succeeded else R.string.failed, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@MainActivity, if (success) R.string.succeeded else R.string.failed, Toast.LENGTH_SHORT)
+            .show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        PermissionsActivity.requestForResult(this, PermissionsActivity.REQ_PERMISSIONS, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        PermissionsActivity.requestForResult(
+            this,
+            PermissionsActivity.REQ_PERMISSIONS,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
 
         createShellLauncher()
 
@@ -96,6 +102,36 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
 
         themeLibApp.addResultListener(resultListener)
+
+        if (needsThemeCenter && !themeLibApp.ipcReceiver.connected) {
+            AlertDialog.Builder(this)
+                .setTitle(R.string.adb_needed)
+                .setMessage(R.string.adb_needed_desc)
+                .setCancelable(false)
+                .setPositiveButton(R.string.show_me_command) { _, _ ->
+                    AlertDialog.Builder(this)
+                        .setTitle(R.string.adb_needed)
+                        .setCancelable(false)
+                        .setMessage(
+                            resources.getString(
+                                R.string.adb_comand,
+                                resources.getString(R.string.command, packageName)
+                            )
+                        )
+                        .setPositiveButton(R.string.check) { d, _ ->
+                            if (themeLibApp.ipcReceiver.connected) d.dismiss()
+                            else Toast.makeText(this, R.string.try_again, Toast.LENGTH_SHORT).show()
+                        }
+                        .setNegativeButton(R.string.close) { _, _ ->
+                            finish()
+                        }
+                        .show()
+                }
+                .setNegativeButton(R.string.close) { _, _ ->
+                    finish()
+                }
+                .show()
+        }
     }
 
     override fun invoke(apk: File) {

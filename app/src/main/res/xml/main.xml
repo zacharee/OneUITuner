@@ -31,15 +31,4 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/other">
-
-        <SwitchPreference
-            android:title="@string/activate_trial_killer"
-            android:summary="@string/activate_trial_killer_desc"
-            android:key="activate_trial_killer"
-            />
-
-    </PreferenceCategory>
-
 </PreferenceScreen>
