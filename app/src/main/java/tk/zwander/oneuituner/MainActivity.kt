@@ -28,6 +28,7 @@ import com.samsungthemelib.ui.Installer
 import com.samsungthemelib.ui.PermissionsActivity
 import com.samsungthemelib.util.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.adb_alert.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tk.zwander.oneuituner.util.*
 import java.io.File
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private val overlayReceiver = OverlayReceiver()
 
     private val backButton by lazy { createBackButton() }
-    private val resultListener = { data: ResultData ->
+    private val resultListener: (ResultData) -> Unit = { data ->
         progress_apply.visibility = View.GONE
         progress_remove.visibility = View.GONE
 
@@ -47,6 +48,12 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val success = status == PackageInstaller.STATUS_SUCCESS
 
         Toast.makeText(this@MainActivity, if (success) R.string.succeeded else R.string.failed, Toast.LENGTH_SHORT)
+            .show()
+
+        AlertDialog.Builder(this)
+            .setTitle(R.string.launch_theme_center)
+            .setMessage(resources.getString(R.string.launch_theme_center_desc, ThemeCompiler.PROJECT_TITLE))
+            .setPositiveButton(android.R.string.ok, null)
             .show()
     }
 
@@ -109,29 +116,34 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 .setMessage(R.string.adb_needed_desc)
                 .setCancelable(false)
                 .setPositiveButton(R.string.show_me_command) { _, _ ->
-                    AlertDialog.Builder(this)
-                        .setTitle(R.string.adb_needed)
-                        .setCancelable(false)
-                        .setMessage(
-                            resources.getString(
-                                R.string.adb_comand,
-                                resources.getString(R.string.command, packageName)
-                            )
-                        )
-                        .setPositiveButton(R.string.check) { d, _ ->
-                            if (themeLibApp.ipcReceiver.connected) d.dismiss()
-                            else Toast.makeText(this, R.string.try_again, Toast.LENGTH_SHORT).show()
-                        }
-                        .setNegativeButton(R.string.close) { _, _ ->
-                            finish()
-                        }
-                        .show()
+                    showADBDialog()
                 }
                 .setNegativeButton(R.string.close) { _, _ ->
                     finish()
                 }
                 .show()
         }
+    }
+
+    private fun showADBDialog() {
+        val dialog = AlertDialog.Builder(this)
+            .setView(R.layout.adb_alert)
+            .setTitle(R.string.adb_needed)
+            .setCancelable(false)
+            .setPositiveButton(R.string.check) { d, _ ->
+                if (themeLibApp.ipcReceiver.connected) d.dismiss()
+                else {
+                    Toast.makeText(this, R.string.try_again, Toast.LENGTH_SHORT).show()
+                    showADBDialog()
+                }
+            }
+            .setNegativeButton(R.string.close) { _, _ ->
+                finish()
+            }
+            .show()
+
+        dialog.message.setText(R.string.adb_command)
+        dialog.command.text = resources.getString(R.string.command, packageName)
     }
 
     override fun invoke(apk: File) {
