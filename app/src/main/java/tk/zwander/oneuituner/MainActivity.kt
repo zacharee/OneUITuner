@@ -21,15 +21,11 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import com.samsungthemelib.ui.Installer
 import com.samsungthemelib.ui.PermissionsActivity
-import com.samsungthemelib.util.compileAndInstall
-import com.samsungthemelib.util.createShellLauncher
-import com.samsungthemelib.util.moveToInputDir
-import com.samsungthemelib.util.needsThemeCenter
+import com.samsungthemelib.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tk.zwander.oneuituner.util.*
@@ -42,17 +38,14 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private val overlayReceiver = OverlayReceiver()
 
     private val backButton by lazy { createBackButton() }
+    private val resultListener = { data: ResultData ->
+        progress_apply.visibility = View.GONE
+        progress_remove.visibility = View.GONE
 
-    private val resultReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            progress_apply.visibility = View.GONE
-            progress_remove.visibility = View.GONE
+        val status = data.status
+        val success = status == PackageInstaller.STATUS_SUCCESS
 
-            val status = intent?.getIntExtra(PackageInstaller.EXTRA_STATUS, -100)
-            val success = status == PackageInstaller.STATUS_SUCCESS
-
-            Toast.makeText(this@MainActivity, if (success) R.string.succeeded else R.string.failed, Toast.LENGTH_SHORT).show()
-        }
+        Toast.makeText(this@MainActivity, if (success) R.string.succeeded else R.string.failed, Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,7 +74,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         apply.setOnClickListener {
             progress_apply.visibility = View.VISIBLE
-            install(currentFrag?.label.toString(), this)
+            compile(currentFrag?.label.toString(), this)
         }
 
         remove.setOnClickListener {
@@ -102,15 +95,15 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
         }
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(resultReceiver, IntentFilter(Installer.ACTION_PACKAGE_RESULT))
+        themeLibApp.addResultListener(resultListener)
     }
 
     override fun invoke(apk: File) {
         if (needsThemeCenter) {
-            moveToInputDir(apk)
+            moveToInputDir(arrayOf(apk))
             compileAndInstall()
         } else {
-            Installer.install(this, apk)
+            Installer.install(this, arrayOf(apk))
         }
     }
 
@@ -142,7 +135,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         overlayReceiver.unregister()
         navController.removeOnDestinationChangedListener(this)
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(resultReceiver)
+        themeLibApp.removeResultListener(resultListener)
     }
 
     override fun onResume() {

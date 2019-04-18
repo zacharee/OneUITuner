@@ -21,7 +21,7 @@ import java.security.KeyStore
 import java.security.PrivateKey
 import java.security.cert.X509Certificate
 
-fun Context.install(which: String, listener: ((apk: File) -> Unit)?) {
+fun Context.compile(which: String, listener: ((apk: File) -> Unit)?) {
     GlobalScope.launch {
         val data = when (which) {
             Keys.clock -> {
