@@ -110,19 +110,33 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         themeLibApp.addResultListener(resultListener)
 
-        if (needsThemeCenter && !themeLibApp.ipcReceiver.connected) {
-            AlertDialog.Builder(this)
-                .setTitle(R.string.adb_needed)
-                .setMessage(R.string.adb_needed_desc)
-                .setCancelable(false)
-                .setPositiveButton(R.string.show_me_command) { _, _ ->
-                    showADBDialog()
+        if (needsThemeCenter) {
+            if (!themeLibApp.ipcReceiver.connected) {
+                showNoIPCDialog()
+            } else {
+                themeLibApp.ipcReceiver.postIPCAction {
+                    if (themeLibApp.libVersion > it.version()) {
+                        it.stop()
+
+                        showNoIPCDialog()
+                    }
                 }
-                .setNegativeButton(R.string.close) { _, _ ->
-                    finish()
-                }
-                .show()
+            }
         }
+    }
+
+    private fun showNoIPCDialog() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.adb_needed)
+            .setMessage(R.string.adb_needed_desc)
+            .setCancelable(false)
+            .setPositiveButton(R.string.show_me_command) { _, _ ->
+                showADBDialog()
+            }
+            .setNegativeButton(R.string.close) { _, _ ->
+                finish()
+            }
+            .show()
     }
 
     private fun showADBDialog() {
