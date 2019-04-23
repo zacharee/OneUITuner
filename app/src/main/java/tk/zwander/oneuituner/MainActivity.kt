@@ -50,11 +50,13 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         Toast.makeText(this@MainActivity, if (success) R.string.succeeded else R.string.failed, Toast.LENGTH_SHORT)
             .show()
 
-        AlertDialog.Builder(this)
-            .setTitle(R.string.launch_theme_center)
-            .setMessage(resources.getString(R.string.launch_theme_center_desc, ThemeCompiler.PROJECT_TITLE))
-            .setPositiveButton(android.R.string.ok, null)
-            .show()
+        if (success) {
+            AlertDialog.Builder(this)
+                .setTitle(R.string.launch_theme_center)
+                .setMessage(resources.getString(R.string.launch_theme_center_desc, ThemeCompiler.PROJECT_TITLE))
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,7 +114,9 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         if (needsThemeCenter) {
             if (!themeLibApp.ipcReceiver.connected) {
-                showNoIPCDialog()
+                isSuAsync {
+                    if (!it) showNoIPCDialog()
+                }
             } else {
                 themeLibApp.ipcReceiver.postIPCAction {
                     if (themeLibApp.libVersion > it.version()) {
