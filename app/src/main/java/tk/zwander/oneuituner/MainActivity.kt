@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import com.samsungthemelib.IRootInterface
 import com.samsungthemelib.ui.Installer
 import com.samsungthemelib.ui.PermissionsActivity
 import com.samsungthemelib.util.*
@@ -34,7 +35,7 @@ import tk.zwander.oneuituner.util.*
 import java.io.File
 
 @ExperimentalCoroutinesApi
-class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener, (File) -> Unit {
+class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener, (File) -> Unit, IPCConnectionListener {
     private val currentFrag: NavDestination?
         get() = navController.currentDestination
     private val overlayReceiver = OverlayReceiver()
@@ -57,6 +58,49 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 .setPositiveButton(android.R.string.ok, null)
                 .show()
         }
+    }
+    private val ipcDialog by lazy {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.adb_needed)
+            .setMessage(R.string.adb_needed_desc)
+            .setCancelable(false)
+            .setPositiveButton(R.string.show_me_command, null)
+            .setNegativeButton(R.string.close) { _, _ ->
+                finish()
+            }
+            .create()
+            .apply {
+                setOnShowListener {
+                    val show = getButton(AlertDialog.BUTTON_POSITIVE)
+                    show.setOnClickListener {
+                        dismiss()
+                        showADBDialog()
+                    }
+                }
+            }
+    }
+    private val adbDialog by lazy {
+        AlertDialog.Builder(this)
+            .setView(R.layout.adb_alert)
+            .setTitle(R.string.adb_needed)
+            .setCancelable(false)
+            .setPositiveButton(R.string.check, null)
+            .setNegativeButton(R.string.close) { _, _ ->
+                finish()
+            }
+            .create()
+            .apply {
+                setOnShowListener {
+                    val check = getButton(AlertDialog.BUTTON_POSITIVE)
+                    check.setOnClickListener {
+                        if (!themeLibApp.ipcReceiver.connected) {
+                            Toast.makeText(this@MainActivity, R.string.try_again, Toast.LENGTH_SHORT).show()
+                        } else {
+                            dismiss()
+                        }
+                    }
+                }
+            }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,6 +155,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
 
         themeLibApp.addResultListener(resultListener)
+        themeLibApp.addConnectionListener(this)
 
         if (needsThemeCenter) {
             if (!themeLibApp.ipcReceiver.connected) {
@@ -129,39 +174,37 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
     }
 
+    override fun onIPCConnected(ipc: IRootInterface?) {
+        mainExecutor.execute {
+            if (ipcDialog.isShowing) {
+                ipcDialog.dismiss()
+            }
+
+            if (adbDialog.isShowing) {
+                adbDialog.dismiss()
+            }
+        }
+    }
+
+    override fun onIPCDisconnected(ipc: IRootInterface?) {
+        isSuAsync {
+            if (it) {
+                themeLibApp.launchSu()
+            } else {
+                ipcDialog.show()
+            }
+        }
+    }
+
     private fun showNoIPCDialog() {
-        AlertDialog.Builder(this)
-            .setTitle(R.string.adb_needed)
-            .setMessage(R.string.adb_needed_desc)
-            .setCancelable(false)
-            .setPositiveButton(R.string.show_me_command) { _, _ ->
-                showADBDialog()
-            }
-            .setNegativeButton(R.string.close) { _, _ ->
-                finish()
-            }
-            .show()
+        ipcDialog.show()
     }
 
     private fun showADBDialog() {
-        val dialog = AlertDialog.Builder(this)
-            .setView(R.layout.adb_alert)
-            .setTitle(R.string.adb_needed)
-            .setCancelable(false)
-            .setPositiveButton(R.string.check) { d, _ ->
-                if (themeLibApp.ipcReceiver.connected) d.dismiss()
-                else {
-                    Toast.makeText(this, R.string.try_again, Toast.LENGTH_SHORT).show()
-                    showADBDialog()
-                }
-            }
-            .setNegativeButton(R.string.close) { _, _ ->
-                finish()
-            }
-            .show()
+        adbDialog.show()
 
-        dialog.message.setText(R.string.adb_command)
-        dialog.command.text = resources.getString(R.string.command, packageName)
+        adbDialog.message.setText(R.string.adb_command)
+        adbDialog.command.text = resources.getString(R.string.command, packageName)
     }
 
     override fun invoke(apk: File) {
