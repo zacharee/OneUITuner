@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         Toast.makeText(this@MainActivity, if (success) R.string.succeeded else R.string.failed, Toast.LENGTH_SHORT)
             .show()
 
-        if (success) {
+        if (success && needsThemeCenter) {
             AlertDialog.Builder(this)
                 .setTitle(R.string.launch_theme_center)
                 .setMessage(resources.getString(R.string.launch_theme_center_desc, ThemeCompiler.PROJECT_TITLE))
