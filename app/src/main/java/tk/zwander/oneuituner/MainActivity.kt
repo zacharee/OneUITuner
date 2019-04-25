@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageInstaller
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -55,7 +56,13 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             AlertDialog.Builder(this)
                 .setTitle(R.string.launch_theme_center)
                 .setMessage(resources.getString(R.string.launch_theme_center_desc, ThemeCompiler.PROJECT_TITLE))
-                .setPositiveButton(android.R.string.ok, null)
+                .setPositiveButton(R.string.go) { _, _ ->
+                    val themeStore = Intent()
+
+                    themeStore.data = Uri.parse("themestore://MainPage?contentsType=THEMES&appId=${ThemeCompiler.PROJECT_PACKAGE_NAME}")
+                    startActivity(themeStore)
+                }
+                .setNegativeButton(R.string.close, null)
                 .show()
         }
     }
