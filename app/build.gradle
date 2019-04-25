@@ -31,6 +31,7 @@ android {
 
     packagingOptions {
         exclude 'META-INF/library_release.kotlin_module'
+        exclude 'META-INF/atomicfu.kotlin_module'
     }
 }
 
@@ -42,8 +43,8 @@ dependencies {
     implementation 'androidx.preference:preference:1.0.0'
 
     implementation 'com.android.tools.build:apksig:3.2.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.0'
     implementation 'com.google.android.material:material:1.1.0-alpha05'
     implementation 'android.arch.navigation:navigation-fragment-ktx:1.0.0'
     implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0'
