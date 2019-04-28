@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <bool name="custom_clock_default">false</bool>
     <bool name="custom_qs_date_default">false</bool>
     <bool name="hide_qs_tile_background_default">false</bool>
     <bool name="old_recents_default">false</bool>

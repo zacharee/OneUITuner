@@ -18,7 +18,6 @@
     <string name="check">Check</string>
     <string name="try_again">Try again</string>
 
-    <string name="custom_clock">Custom Status Bar Clock</string>
     <string name="header_count_portrait">Header Count (Portrait)</string>
     <string name="header_count_landscape">Header Count (Landscape)</string>
     <string name="old_recents">Old Recents Menu</string>
@@ -40,9 +39,9 @@
     <string name="disable_flashing_wifi">Disable Flashing WiFi Icon</string>
     <string name="launch_theme_center">Launch Theme Center</string>
     <string name="go">Go</string>
+    <string name="status_bar_clock_type">Status Bar Clock Type</string>
 
     <string name="root_required_desc">Because of limitations added in later versions of One UI, your device must be rooted to use this app.</string>
-    <string name="custom_clock_desc">Replaces Samsung\'s status bar clock with a custom version that allows you to set your own time format.</string>
     <string name="old_recents_desc">Restores the old vertical Recents carousel. Reboot required.</string>
     <string name="left_system_icons_desc">Move the system icons, like the WiFi, signal, etc icons, to the left of the status bar.</string>
     <string name="hide_status_bar_carrier_desc">Hide the carrier label in the status bar on the lock screen and when unlocked. Reboot required.</string>
@@ -50,7 +49,18 @@
     <string name="adb_needed_desc">You\'ll need to run a command through ADB to use this app. OneUI Tuner will tell you if you need to run it again (usually after a reboot).</string>
     <string name="adb_command">Run this command from your computer:</string>
     <string name="launch_theme_center_desc">The theme was successfully compiled and installed. Apply it from the Theme Center. Look for \"%s\".</string>
+    <string name="status_bar_clock_type_desc">Choose to replace the status bar clock with the AOSP style or a custom format. The AOSP clock will allow you to enable seconds using SystemUI Tuner. The custom format will allow you to use any format you want, but won\'t automatically change color.</string>
 
     <string name="qqs_hint">Set your QS grid to 5x3 if the header icons overlap at higher values.</string>
     <string name="qs_row_col_hint">Set your QS grid to 5x3 for these to take effect.</string>
+
+    <string name="clock_format_default">Default</string>
+    <string name="clock_format_custom">Custom</string>
+    <string name="clock_format_aosp">AOSP</string>
+
+    <string name="clock_type_default">default</string>
+    <string name="clock_type_custom">custom</string>
+    <string name="clock_type_aosp">aosp</string>
+
+    <string name="default_clock_type">@string/clock_type_default</string>
 </resources>

@@ -18,10 +18,10 @@ class PrefManager private constructor(context: Context) : ContextWrapper(context
             return instance!!
         }
 
-        const val CUSTOM_CLOCK = "custom_clock"
         const val CLOCK_FORMAT = "clock_format"
         const val CUSTOM_QS_DATE_FORMAT = "custom_qs_date_format"
         const val QS_DATE_FORMAT = "qs_date_format"
+        const val CLOCK_TYPE = "clock_type"
 
         const val HEADER_COUNT_PORTRAIT = "header_count_portrait"
         const val HEADER_COUNT_LANDSCAPE = "header_count_landscape"
@@ -45,8 +45,12 @@ class PrefManager private constructor(context: Context) : ContextWrapper(context
 
     private val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
-    val customClock: Boolean
-        get() = getBoolean(CUSTOM_CLOCK, resourceBool(R.bool.custom_clock_default))
+    val clockTypeDefault = resourceString(R.string.clock_type_default)
+    val clockTypeCustom = resourceString(R.string.clock_type_custom)
+    val clockTypeAosp = resourceString(R.string.clock_type_aosp)
+
+    val clockType: String
+        get() = getString(CLOCK_TYPE, resourceString(R.string.default_clock_type))
 
     val clockFormat: String
         get() = getString(CLOCK_FORMAT, resourceString(R.string.custom_clock_format_default))

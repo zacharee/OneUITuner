@@ -2,18 +2,20 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreference
-        android:title="@string/custom_clock"
-        android:summary="@string/custom_clock_desc"
-        android:key="custom_clock"
-        android:defaultValue="@bool/custom_clock_default"
+    <ListPreference
+        android:title="@string/status_bar_clock_type"
+        android:summary="@string/status_bar_clock_type_desc"
+        android:key="clock_type"
+        android:entries="@array/clock_format_labels"
+        android:entryValues="@array/clock_format_values"
+        android:defaultValue="@string/clock_type_default"
         />
 
     <EditTextPreference
         android:title="@string/clock_format"
         android:key="clock_format"
-        android:dependency="custom_clock"
         android:defaultValue="@string/custom_clock_format_default"
+        app:isPreferenceVisible="false"
         />
 
     <SwitchPreference

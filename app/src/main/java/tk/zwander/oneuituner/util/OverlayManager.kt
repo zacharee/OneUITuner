@@ -32,17 +32,34 @@ fun Context.compile(which: String, listener: ((apk: File) -> Unit)?) {
                         val clockFormat = prefs.clockFormat
                         val qsDateFormat = prefs.qsDateFormat
 
-                        if (prefs.customClock && clockFormat.isValidClockFormat) {
-                            add(
-                                ResourceFileData(
-                                    "qs_status_bar_clock.xml",
-                                    "layout",
-                                    getResourceXmlFromAsset(
-                                        "clock/layout",
-                                        "qs_status_bar_clock_custom.xml"
-                                    ).replace("h:mm a", clockFormat)
+                        when(prefs.clockType) {
+                            prefs.clockTypeCustom -> {
+                                if (clockFormat.isValidClockFormat) {
+                                    add(
+                                        ResourceFileData(
+                                            "qs_status_bar_clock.xml",
+                                            "layout",
+                                            getResourceXmlFromAsset(
+                                                "clock/layout",
+                                                "qs_status_bar_clock_custom.xml"
+                                            ).replace("h:mm a", clockFormat)
+                                        )
+                                    )
+                                }
+                            }
+
+                            prefs.clockTypeAosp -> {
+                                add(
+                                    ResourceFileData(
+                                        "qs_status_bar_clock.xml",
+                                        "layout",
+                                        getResourceXmlFromAsset(
+                                            "clock/layout",
+                                            "qs_status_bar_clock_aosp.xml"
+                                        ).replace("h:mm a", clockFormat)
+                                    )
                                 )
-                            )
+                            }
                         }
 
                         if (prefs.customQsDateFormat && qsDateFormat.isValidClockFormat) {
