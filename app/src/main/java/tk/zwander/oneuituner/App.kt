@@ -12,7 +12,7 @@ class App : ThemeLibApp() {
         super.onCreate()
 
         val channel = NotificationChannel(
-            "opfp_main",
+            "oneuituner_main",
             resources.getText(R.string.app_name),
             NotificationManager.IMPORTANCE_DEFAULT
         )
