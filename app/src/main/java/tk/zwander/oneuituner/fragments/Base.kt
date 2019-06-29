@@ -2,9 +2,15 @@ package tk.zwander.oneuituner.fragments
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.TypedValue
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.recyclerview.widget.RecyclerView
+import tk.zwander.oneuituner.R
+import tk.zwander.oneuituner.util.pxToDp
 
 abstract class Base : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
     internal abstract val title: Int
@@ -22,6 +28,21 @@ abstract class Base : PreferenceFragmentCompat(), SharedPreferences.OnSharedPref
 
         activity?.setTitle(title)
         keysToSync.forEach { syncSummary(it) }
+    }
+
+    override fun onCreateRecyclerView(
+        inflater: LayoutInflater?,
+        parent: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): RecyclerView {
+        val recView = super.onCreateRecyclerView(inflater, parent, savedInstanceState)
+        recView.clipToPadding = false
+        recView.setPadding(0, 0, 0, run {
+            val tv = TypedValue()
+            context?.theme?.resolveAttribute(R.attr.actionBarSize, tv, true)
+            context?.resources?.getDimensionPixelSize(tv.resourceId)!! + context!!.pxToDp(16f).toInt()
+        })
+        return recView
     }
 
     @CallSuper

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.util.Log
+import android.util.TypedValue
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
@@ -98,3 +99,6 @@ fun Exception.log() {
 
     Log.e("OneUITuner", writer.toString())
 }
+
+fun Context.pxToDp(px: Float) =
+    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, px, resources.displayMetrics)

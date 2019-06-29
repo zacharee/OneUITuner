@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private val backButton by lazy { createBackButton() }
     private val resultListener: (ResultData) -> Unit = { data ->
         progress_apply.visibility = View.GONE
+        progress_install.visibility = View.GONE
         progress_remove.visibility = View.GONE
 
         val status = data.status
@@ -164,19 +165,27 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         themeLibApp.addResultListener(resultListener)
         themeLibApp.addConnectionListener(this)
 
-        if (needsThemeCenter) {
-            if (!themeLibApp.ipcReceiver.connected) {
-                isSuAsync {
-                    if (!it) showNoIPCDialog()
-                }
-            } else {
-                themeLibApp.ipcReceiver.postIPCAction {
-                    if (themeLibApp.libVersion > it.version()) {
-                        it.stop()
+//        if (needsThemeCenter) {
+//            if (!themeLibApp.ipcReceiver.connected) {
+//                isSuAsync {
+//                    if (!it) showNoIPCDialog()
+//                }
+//            } else {
+//                themeLibApp.ipcReceiver.postIPCAction {
+//                    if (themeLibApp.libVersion > it.version()) {
+//                        it.stop()
+//
+//                        showNoIPCDialog()
+//                    }
+//                }
+//            }
+//        }
 
-                        showNoIPCDialog()
-                    }
-                }
+        if (needsThemeCenter) {
+            install_wrapper.visibility = View.VISIBLE
+            install.setOnClickListener {
+                progress_install.visibility = View.VISIBLE
+                compileAndInstall()
             }
         }
     }
@@ -217,7 +226,9 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun invoke(apk: File) {
         if (needsThemeCenter) {
             moveToInputDir(arrayOf(apk))
-            compileAndInstall()
+            runOnUiThread {
+                progress_apply.visibility = View.GONE
+            }
         } else {
             Installer.install(this, arrayOf(apk))
         }
