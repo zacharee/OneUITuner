@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">OneUI Tuner</string>
     <string name="options">Options</string>
+    <string name="use_synergy">Use Synergy</string>
 
     <string name="clock">Clock</string>
     <string name="qs">Quick Settings</string>

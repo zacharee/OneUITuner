@@ -55,7 +55,7 @@ val Context.prefs: PrefManager
     get() = PrefManager.getInstance(this)
 
 fun Context.isInstalled(packageName: String) =
-        if (needsThemeCenter) isPartInstalled(packageName)
+        if (needsThemeCenter) if (prefs.useSynergy) false else isPartInstalled(packageName)
         else isPartActive(packageName)
 
 val PreferenceFragmentCompat.navController: NavController
@@ -102,3 +102,6 @@ fun Exception.log() {
 
 fun Context.pxToDp(px: Float) =
     TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, px, resources.displayMetrics)
+
+val Context.needsThemeCenterAndNoSynergy: Boolean
+    get() = needsThemeCenter && !prefs.useSynergy

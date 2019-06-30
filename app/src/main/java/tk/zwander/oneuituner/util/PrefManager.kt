@@ -41,6 +41,8 @@ class PrefManager private constructor(context: Context) : ContextWrapper(context
         const val DISABLE_FLASHING_WIFI = "disable_flashing_wifi"
 
         const val LOCK_SCREEN_ROTATION = "lock_screen_rotation"
+
+        const val USE_SYNERGY = "use_synergy"
     }
 
     private val prefs = PreferenceManager.getDefaultSharedPreferences(this)
@@ -105,6 +107,9 @@ class PrefManager private constructor(context: Context) : ContextWrapper(context
 
     val lockScreenRotation: Boolean
         get() = getBoolean(LOCK_SCREEN_ROTATION, resourceBool(R.bool.lock_screen_rotation_default))
+
+    val useSynergy: Boolean
+        get() = getBoolean(USE_SYNERGY, resourceBool(R.bool.use_synergy_default))
 
     fun getInt(key: String, def: Int = 0) = prefs.getInt(key, def)
     fun getString(key: String, def: String): String = prefs.getString(key, def) ?: def

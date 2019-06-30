@@ -12,6 +12,7 @@ import android.content.pm.PackageInstaller
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -23,6 +24,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import com.samsungthemelib.IRootInterface
@@ -32,8 +34,10 @@ import com.samsungthemelib.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.adb_alert.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import tk.zwander.oneuituner.ui.SettingsActivity
 import tk.zwander.oneuituner.util.*
 import java.io.File
+import java.net.URLConnection
 
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener, (File) -> Unit, IPCConnectionListener {
@@ -180,14 +184,12 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 //                }
 //            }
 //        }
+    }
 
-        if (needsThemeCenter) {
-            install_wrapper.visibility = View.VISIBLE
-            install.setOnClickListener {
-                progress_install.visibility = View.VISIBLE
-                compileAndInstall()
-            }
-        }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+
+        return true
     }
 
     override fun onIPCConnected(ipc: IRootInterface?) {
@@ -225,7 +227,12 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun invoke(apk: File) {
         if (needsThemeCenter) {
-            moveToInputDir(arrayOf(apk))
+            if (prefs.useSynergy) {
+                installForSynergy(apk)
+            } else {
+                moveToInputDir(arrayOf(apk))
+            }
+
             runOnUiThread {
                 progress_apply.visibility = View.GONE
             }
@@ -234,10 +241,27 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
     }
 
+    private fun installForSynergy(file: File) {
+        val fileUri = FileProvider.getUriForFile(this,
+            "$packageName.apkprovider", file)
+        Intent(Intent.ACTION_SEND).run {
+            `package` = "projekt.samsung.theme.compiler"
+            putExtra(Intent.EXTRA_STREAM, fileUri)
+            type = URLConnection.guessContentTypeFromName(file.name)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(this)
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             android.R.id.home -> {
                 onBackPressed()
+                true
+            }
+            R.id.options -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -299,6 +323,16 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 else -> false
             }
         ) View.VISIBLE else View.GONE
+
+        if (needsThemeCenterAndNoSynergy) {
+            install_wrapper.visibility = View.VISIBLE
+            install.setOnClickListener {
+                progress_install.visibility = View.VISIBLE
+                compileAndInstall()
+            }
+        } else {
+            install_wrapper.visibility = View.GONE
+        }
     }
 
     private var RelativeLayout.animatedVisibility: Int
