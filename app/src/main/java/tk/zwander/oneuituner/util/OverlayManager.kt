@@ -7,6 +7,7 @@ import com.android.apksig.ApkSigner
 import com.samsungthemelib.ui.Installer
 import com.samsungthemelib.util.needsThemeCenter
 import com.samsungthemelib.util.removePart
+import com.samsungthemelib.util.themeLibApp
 import eu.chainfire.libsuperuser.Shell
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -404,7 +405,7 @@ fun Context.uninstall(which: String) {
     if (needsThemeCenter) {
         removePart(pkg)
     } else {
-        Installer.uninstall(this, pkg)
+        Installer.uninstall(this, pkg, themeLibApp.rootBinder)
     }
 }
 
