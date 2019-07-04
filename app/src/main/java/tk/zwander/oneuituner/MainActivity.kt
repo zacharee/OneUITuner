@@ -32,7 +32,6 @@ import com.samsungthemelib.ui.Installer
 import com.samsungthemelib.ui.PermissionsActivity
 import com.samsungthemelib.util.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.adb_alert.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tk.zwander.oneuituner.ui.SettingsActivity
 import tk.zwander.oneuituner.util.*
@@ -71,49 +70,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 .show()
         }
     }
-    private val ipcDialog by lazy {
-        AlertDialog.Builder(this)
-            .setTitle(R.string.adb_needed)
-            .setMessage(R.string.adb_needed_desc)
-            .setCancelable(false)
-            .setPositiveButton(R.string.show_me_command, null)
-            .setNegativeButton(R.string.close) { _, _ ->
-                finish()
-            }
-            .create()
-            .apply {
-                setOnShowListener {
-                    val show = getButton(AlertDialog.BUTTON_POSITIVE)
-                    show.setOnClickListener {
-                        dismiss()
-                        showADBDialog()
-                    }
-                }
-            }
-    }
-    private val adbDialog by lazy {
-        AlertDialog.Builder(this)
-            .setView(R.layout.adb_alert)
-            .setTitle(R.string.adb_needed)
-            .setCancelable(false)
-            .setPositiveButton(R.string.check, null)
-            .setNegativeButton(R.string.close) { _, _ ->
-                finish()
-            }
-            .create()
-            .apply {
-                setOnShowListener {
-                    val check = getButton(AlertDialog.BUTTON_POSITIVE)
-                    check.setOnClickListener {
-                        if (!themeLibApp.ipcReceiver.connected) {
-                            Toast.makeText(this@MainActivity, R.string.try_again, Toast.LENGTH_SHORT).show()
-                        } else {
-                            dismiss()
-                        }
-                    }
-                }
-            }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,8 +80,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             PermissionsActivity.REQ_PERMISSIONS,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
-
-        createShellLauncher()
 
         overlayReceiver.register()
 
@@ -193,36 +147,14 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     override fun onIPCConnected(ipc: IRootInterface?) {
-        mainExecutor.execute {
-            if (ipcDialog.isShowing) {
-                ipcDialog.dismiss()
-            }
-
-            if (adbDialog.isShowing) {
-                adbDialog.dismiss()
-            }
-        }
     }
 
     override fun onIPCDisconnected(ipc: IRootInterface?) {
         isSuAsync {
             if (it) {
                 themeLibApp.launchSu()
-            } else {
-                ipcDialog.show()
             }
         }
-    }
-
-    private fun showNoIPCDialog() {
-        ipcDialog.show()
-    }
-
-    private fun showADBDialog() {
-        adbDialog.show()
-
-        adbDialog.message.setText(R.string.adb_command)
-        adbDialog.command.text = resources.getString(R.string.command, packageName)
     }
 
     override fun invoke(apk: File) {
