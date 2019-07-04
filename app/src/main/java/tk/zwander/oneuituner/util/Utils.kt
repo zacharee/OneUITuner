@@ -55,8 +55,11 @@ val Context.prefs: PrefManager
     get() = PrefManager.getInstance(this)
 
 fun Context.isInstalled(packageName: String) =
-        if (needsThemeCenter) if (prefs.useSynergy) false else isPartInstalled(packageName)
-        else isPartActive(packageName)
+    when {
+        prefs.useSynergy -> false
+        needsThemeCenter -> isPartInstalled(packageName)
+        else -> isPartActive(packageName)
+    }
 
 val PreferenceFragmentCompat.navController: NavController
     get() = NavHostFragment.findNavController(this)

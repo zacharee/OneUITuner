@@ -169,7 +169,11 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 progress_apply.visibility = View.GONE
             }
         } else {
-            Installer.install(this, arrayOf(apk), themeLibApp.rootBinder)
+            if (prefs.useSynergy) {
+                installForSynergy(apk)
+            } else {
+                Installer.install(this, arrayOf(apk), themeLibApp.rootBinder)
+            }
         }
     }
 
