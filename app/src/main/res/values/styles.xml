@@ -1,8 +1,10 @@
 <resources>
     <style name="AppTheme" parent="Theme.MaterialComponents">
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondary</item>
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorError">@color/colorError</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">

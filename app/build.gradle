@@ -51,7 +51,7 @@ dependencies {
 
     implementation 'com.github.zacharee:colorpicker:040874fb27'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.github.zacharee:SeekBarPreference:d52fbda6a5'
+    implementation 'com.github.zacharee:SeekBarPreference:423d4f5781'
     implementation 'eu.chainfire:libsuperuser:1.0.0.+'
     implementation 'com.github.zacharee:CollapsiblePreferenceCategory:a8d662ea1c'
 //    implementation 'com.github.zacharee:SamsungThemeLib:8c17488ddd'
