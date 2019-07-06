@@ -392,7 +392,7 @@ fun Context.compile(which: String, listener: ((apk: File) -> Unit)?) {
     }
 }
 
-fun Context.uninstall(which: String) {
+fun Context.uninstall(which: String, listener: () -> Unit) {
     val pkg = when (which) {
         Keys.clock -> Keys.clockPkg
         Keys.qs -> Keys.qsPkg
@@ -403,7 +403,7 @@ fun Context.uninstall(which: String) {
     }
 
     if (needsThemeCenter) {
-        removePart(pkg)
+        removePart(pkg, listener)
     } else {
         Installer.uninstall(this, pkg, themeLibApp.rootBinder)
     }
@@ -476,7 +476,7 @@ fun Context.compileOverlay(manifest: File, overlayFile: File, resFile: File, tar
         .append(overlayFile)
         .toString()
 
-    loggedSh(aaptCmd)
+    Shell.SH.run(aaptCmd)
     Shell.SH.run("chmod 777 ${overlayFile.absolutePath}")
 }
 

@@ -18,6 +18,7 @@
     <string name="close">Close</string>
     <string name="check">Check</string>
     <string name="try_again">Try again</string>
+    <string name="back">Back</string>
 
     <string name="header_count_portrait">Header Count (Portrait)</string>
     <string name="header_count_landscape">Header Count (Landscape)</string>

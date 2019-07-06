@@ -1,7 +1,6 @@
 package tk.zwander.oneuituner.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import tk.zwander.oneuituner.R
@@ -32,7 +31,6 @@ class Clock : Base() {
     }
 
     private fun updateFormatVisibility(newValue: String) {
-        Log.e("OneUITuner", newValue)
         clockFormat.isVisible = newValue == context!!.prefs.clockTypeCustom
     }
 }

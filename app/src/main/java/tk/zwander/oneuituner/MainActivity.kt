@@ -4,29 +4,22 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.LayoutTransition
 import android.app.Activity
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageInstaller
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.AnticipateInterpolator
 import android.view.animation.OvershootInterpolator
-import android.widget.ImageButton
-import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import com.google.android.material.shape.MaterialShapeDrawable
 import com.samsungthemelib.IRootInterface
 import com.samsungthemelib.ui.Installer
 import com.samsungthemelib.ui.PermissionsActivity
@@ -39,16 +32,22 @@ import java.io.File
 import java.net.URLConnection
 
 @ExperimentalCoroutinesApi
-class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener, (File) -> Unit, IPCConnectionListener {
+class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener, (File) -> Unit, () -> Unit, IPCConnectionListener {
     private val currentFrag: NavDestination?
         get() = navController.currentDestination
-    private val overlayReceiver = OverlayReceiver()
 
-    private val backButton by lazy { createBackButton() }
+    private val navButton by lazy {
+        run {
+            Toolbar::class.java
+                .getDeclaredField("mNavButtonView")
+                .apply {
+                    isAccessible = true
+                }
+                .get(bottom_bar) as View
+        }
+    }
     private val resultListener: (ResultData) -> Unit = { data ->
-        progress_apply.visibility = View.GONE
-        progress_install.visibility = View.GONE
-        progress_remove.visibility = View.GONE
+        progress.animatedVisibility = View.GONE
 
         val status = data.status
         val success = status == PackageInstaller.STATUS_SUCCESS
@@ -81,14 +80,25 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
 
-        overlayReceiver.register()
+        menuInflater.inflate(R.menu.main, bottom_bar.menu)
+        bottom_bar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.options -> {
+                    startActivity(Intent(this, SettingsActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
+        bottom_bar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+        navButton.visibility = View.GONE
 
         root.layoutTransition = LayoutTransition()
             .apply {
                 enableTransitionType(LayoutTransition.CHANGING)
             }
-
-        setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -98,13 +108,13 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         navController.addOnDestinationChangedListener(this)
 
         apply.setOnClickListener {
-            progress_apply.visibility = View.VISIBLE
+            progress.animatedVisibility = View.VISIBLE
             compile(currentFrag?.label.toString(), this)
         }
 
         remove.setOnClickListener {
-            progress_remove.visibility = View.VISIBLE
-            uninstall(currentFrag?.label.toString())
+            progress.animatedVisibility = View.VISIBLE
+            uninstall(currentFrag?.label.toString(), this)
         }
 
         val animDuration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
@@ -113,12 +123,13 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             AnimationUtils.loadAnimation(this, android.R.anim.fade_in).apply { duration = animDuration }
         title_switcher.outAnimation =
             AnimationUtils.loadAnimation(this, android.R.anim.fade_out).apply { duration = animDuration }
-        title_switcher.setFactory {
-            AppCompatTextView(this).apply {
-                setTextAppearance(android.R.style.TextAppearance_Material_Widget_ActionBar_Title)
-                setTextColor(Color.WHITE)
-            }
-        }
+//        title_switcher.setFactory {
+//            AppCompatTextView(this).apply {
+//                setTextAppearance(android.R.style.TextAppearance_Material_Widget_ActionBar_Title)
+//                setTextColor(Color.WHITE)
+//                gravity = Gravity.CENTER_VERTICAL
+//            }
+//        }
 
         themeLibApp.addResultListener(resultListener)
         themeLibApp.addConnectionListener(this)
@@ -138,12 +149,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 //                }
 //            }
 //        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
-
-        return true
     }
 
     override fun onIPCConnected(ipc: IRootInterface?) {
@@ -166,14 +171,27 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
 
             runOnUiThread {
-                progress_apply.visibility = View.GONE
+                progress.animatedVisibility = View.GONE
+                updateFABs()
             }
         } else {
             if (prefs.useSynergy) {
                 installForSynergy(apk)
+
+                runOnUiThread {
+                    progress.animatedVisibility = View.GONE
+                    updateFABs()
+                }
             } else {
                 Installer.install(this, arrayOf(apk), themeLibApp.rootBinder)
             }
+        }
+    }
+
+    override fun invoke() {
+        runOnUiThread {
+            progress.visibility = View.GONE
+            updateFABs()
         }
     }
 
@@ -187,20 +205,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(this)
-        }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
-            android.R.id.home -> {
-                onBackPressed()
-                true
-            }
-            R.id.options -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -220,7 +224,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onDestroy() {
         super.onDestroy()
 
-        overlayReceiver.unregister()
         navController.removeOnDestinationChangedListener(this)
         themeLibApp.removeResultListener(resultListener)
     }
@@ -245,11 +248,10 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val id = currentFrag?.id
         val enabled = id != R.id.main
 
-        setBackClickable(enabled)
+        navButton.animatedVisibility = if (enabled) View.VISIBLE else View.GONE
+        apply.animatedVisibility = if (enabled) View.VISIBLE else View.INVISIBLE
 
-        apply_wrapper.animatedVisibility = if (enabled) View.VISIBLE else View.GONE
-
-        remove_wrapper.animatedVisibility = if (
+        remove.animatedVisibility = if (
             when (id) {
                 R.id.clock -> isInstalled(Keys.clockPkg)
                 R.id.qs -> isInstalled(Keys.qsPkg)
@@ -258,20 +260,20 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 R.id.lockScreen -> isInstalled(Keys.lockScreenPkg)
                 else -> false
             }
-        ) View.VISIBLE else View.GONE
+        ) View.VISIBLE else if (prefs.useSynergy) View.GONE else View.INVISIBLE
 
-        if (needsThemeCenterAndNoSynergy) {
-            install_wrapper.visibility = View.VISIBLE
+        if (needsThemeCenterAndNoSynergy && !enabled) {
+            install.animatedVisibility = View.VISIBLE
             install.setOnClickListener {
-                progress_install.visibility = View.VISIBLE
+                progress.animatedVisibility = View.VISIBLE
                 compileAndInstall()
             }
         } else {
-            install_wrapper.visibility = View.GONE
+            install.animatedVisibility = if (prefs.useSynergy) View.GONE else View.INVISIBLE
         }
     }
 
-    private var RelativeLayout.animatedVisibility: Int
+    private var View.animatedVisibility: Int
         get() = visibility
         set(value) {
             val hide = value != View.VISIBLE
@@ -289,44 +291,4 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     }
                 })
         }
-
-    private fun setBackClickable(clickable: Boolean) {
-        backButton.isClickable = clickable
-
-        backButton.animate()
-            .scaleX(if (clickable) 1f else 0f)
-            .scaleY(if (clickable) 1f else 0f)
-            .setInterpolator(if (clickable) OvershootInterpolator() else AnticipateInterpolator())
-            .setDuration(resources.getInteger(android.R.integer.config_mediumAnimTime).toLong())
-            .start()
-    }
-
-    private fun createBackButton(): ImageButton {
-        val mNavButtonView = toolbar::class.java.getDeclaredField("mNavButtonView")
-        mNavButtonView.isAccessible = true
-
-        return mNavButtonView.get(toolbar) as ImageButton
-    }
-
-    inner class OverlayReceiver : BroadcastReceiver() {
-        fun register() {
-            val remFilter = IntentFilter()
-            remFilter.addAction(Intent.ACTION_PACKAGE_ADDED)
-            remFilter.addAction(Intent.ACTION_PACKAGE_REMOVED)
-            remFilter.addDataScheme("package")
-
-            registerReceiver(this, remFilter)
-        }
-
-        fun unregister() {
-            unregisterReceiver(this)
-        }
-
-        override fun onReceive(context: Context?, intent: Intent?) {
-//            when (intent?.action) {
-//                Intent.ACTION_PACKAGE_ADDED,
-//                    Intent.ACTION_PACKAGE_REMOVED -> updateFABs()
-//            }
-        }
-    }
 }
