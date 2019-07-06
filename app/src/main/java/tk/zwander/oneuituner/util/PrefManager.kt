@@ -108,8 +108,11 @@ class PrefManager private constructor(context: Context) : ContextWrapper(context
     val lockScreenRotation: Boolean
         get() = getBoolean(LOCK_SCREEN_ROTATION, resourceBool(R.bool.lock_screen_rotation_default))
 
-    val useSynergy: Boolean
+    var useSynergy: Boolean
         get() = getBoolean(USE_SYNERGY, resourceBool(R.bool.use_synergy_default))
+        set(value) {
+            putBoolean(USE_SYNERGY, value)
+        }
 
     fun getInt(key: String, def: Int = 0) = prefs.getInt(key, def)
     fun getString(key: String, def: String): String = prefs.getString(key, def) ?: def

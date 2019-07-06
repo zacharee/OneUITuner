@@ -108,3 +108,11 @@ fun Context.pxToDp(px: Float) =
 
 val Context.needsThemeCenterAndNoSynergy: Boolean
     get() = needsThemeCenter && !prefs.useSynergy
+
+val Context.isSynergyInstalled: Boolean
+    get() = try {
+        packageManager.getPackageInfo("projekt.samsung.theme.compiler", 0)
+        true
+    } catch (e: java.lang.Exception) {
+        false
+    }

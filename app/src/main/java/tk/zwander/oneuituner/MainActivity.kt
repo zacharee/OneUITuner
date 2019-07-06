@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.LayoutTransition
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageInstaller
 import android.net.Uri
 import android.os.Bundle
@@ -19,6 +20,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import com.google.android.material.elevation.ElevationOverlayProvider
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.samsungthemelib.IRootInterface
 import com.samsungthemelib.ui.Installer
@@ -26,13 +28,12 @@ import com.samsungthemelib.ui.PermissionsActivity
 import com.samsungthemelib.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import tk.zwander.oneuituner.ui.SettingsActivity
 import tk.zwander.oneuituner.util.*
 import java.io.File
 import java.net.URLConnection
 
 @ExperimentalCoroutinesApi
-class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener, (File) -> Unit, () -> Unit, IPCConnectionListener {
+class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener, (File) -> Unit, () -> Unit, IPCConnectionListener, SharedPreferences.OnSharedPreferenceChangeListener {
     private val currentFrag: NavDestination?
         get() = navController.currentDestination
 
@@ -74,26 +75,25 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        prefs.registerOnSharedPreferenceChangeListener(this)
+
         PermissionsActivity.requestForResult(
             this,
             PermissionsActivity.REQ_PERMISSIONS,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
 
-        menuInflater.inflate(R.menu.main, bottom_bar.menu)
-        bottom_bar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.options -> {
-                    startActivity(Intent(this, SettingsActivity::class.java))
-                    true
-                }
-                else -> false
-            }
-        }
         bottom_bar.setNavigationOnClickListener {
             onBackPressed()
         }
         navButton.visibility = View.GONE
+
+        with(bottom_bar.background as MaterialShapeDrawable) {
+            val color = ElevationOverlayProvider(this@MainActivity)
+                .getSurfaceColorWithOverlayIfNeeded(elevation)
+
+            window.navigationBarColor = color
+        }
 
         root.layoutTransition = LayoutTransition()
             .apply {
@@ -123,32 +123,9 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             AnimationUtils.loadAnimation(this, android.R.anim.fade_in).apply { duration = animDuration }
         title_switcher.outAnimation =
             AnimationUtils.loadAnimation(this, android.R.anim.fade_out).apply { duration = animDuration }
-//        title_switcher.setFactory {
-//            AppCompatTextView(this).apply {
-//                setTextAppearance(android.R.style.TextAppearance_Material_Widget_ActionBar_Title)
-//                setTextColor(Color.WHITE)
-//                gravity = Gravity.CENTER_VERTICAL
-//            }
-//        }
 
         themeLibApp.addResultListener(resultListener)
         themeLibApp.addConnectionListener(this)
-
-//        if (needsThemeCenter) {
-//            if (!themeLibApp.ipcReceiver.connected) {
-//                isSuAsync {
-//                    if (!it) showNoIPCDialog()
-//                }
-//            } else {
-//                themeLibApp.ipcReceiver.postIPCAction {
-//                    if (themeLibApp.libVersion > it.version()) {
-//                        it.stop()
-//
-//                        showNoIPCDialog()
-//                    }
-//                }
-//            }
-//        }
     }
 
     override fun onIPCConnected(ipc: IRootInterface?) {
@@ -224,6 +201,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onDestroy() {
         super.onDestroy()
 
+        prefs.unregisterOnSharedPreferenceChangeListener(this)
         navController.removeOnDestinationChangedListener(this)
         themeLibApp.removeResultListener(resultListener)
     }
@@ -232,6 +210,14 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         super.onResume()
 
         updateFABs()
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
+        when (key) {
+            PrefManager.USE_SYNERGY -> {
+                updateFABs()
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -262,7 +248,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
         ) View.VISIBLE else if (prefs.useSynergy) View.GONE else View.INVISIBLE
 
-        if (needsThemeCenterAndNoSynergy && !enabled) {
+        if (needsThemeCenterAndNoSynergy) {
             install.animatedVisibility = View.VISIBLE
             install.setOnClickListener {
                 progress.animatedVisibility = View.VISIBLE
