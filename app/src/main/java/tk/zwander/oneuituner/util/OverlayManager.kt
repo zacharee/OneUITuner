@@ -402,7 +402,7 @@ fun Context.uninstall(which: String, listener: () -> Unit) {
         else -> return
     }
 
-    if (needsThemeCenter) {
+    if (needsThemeCenter && !prefs.forceNormalInstall) {
         removePart(pkg, listener)
     } else {
         Installer.uninstall(this, pkg, themeLibApp.rootBinder)

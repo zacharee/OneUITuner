@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import com.samsungthemelib.util.mainHandler
+import com.samsungthemelib.util.needsThemeCenter
 import tk.zwander.oneuituner.R
 import tk.zwander.oneuituner.util.*
 
@@ -44,6 +45,10 @@ class Main : Base() {
                     }
                     true
                 }
+        }
+
+        with(findPreference(PrefManager.FORCE_NORMAL_INSTALL)) {
+            isVisible = needsThemeCenter
         }
     }
 

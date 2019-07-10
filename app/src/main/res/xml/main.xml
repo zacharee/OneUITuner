@@ -47,6 +47,14 @@
             android:icon="@drawable/synergy_icon"
             />
 
+        <SwitchPreference
+            android:title="@string/force_normal_install"
+            android:summary="@string/force_normal_install_desc"
+            android:key="force_normal_install"
+            android:defaultValue="@bool/force_normal_install"
+            android:icon="@drawable/ic_archive_24dp"
+            />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

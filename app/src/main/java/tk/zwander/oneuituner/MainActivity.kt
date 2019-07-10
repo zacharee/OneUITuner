@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         Toast.makeText(this@MainActivity, if (success) R.string.succeeded else R.string.failed, Toast.LENGTH_SHORT)
             .show()
 
-        if (success && needsThemeCenter) {
+        if (success && needsThemeCenter && !prefs.forceNormalInstall) {
             AlertDialog.Builder(this)
                 .setTitle(R.string.launch_theme_center)
                 .setMessage(resources.getString(R.string.launch_theme_center_desc, ThemeCompiler.PROJECT_TITLE))
@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     override fun invoke(apk: File) {
-        if (needsThemeCenter) {
+        if (needsThemeCenter && !prefs.forceNormalInstall) {
             if (prefs.useSynergy) {
                 installForSynergy(apk)
             } else {
@@ -214,7 +214,8 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
         when (key) {
-            PrefManager.USE_SYNERGY -> {
+            PrefManager.USE_SYNERGY,
+            PrefManager.FORCE_NORMAL_INSTALL -> {
                 updateFABs()
             }
         }
@@ -248,7 +249,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
         ) View.VISIBLE else if (prefs.useSynergy) View.GONE else View.INVISIBLE
 
-        if (needsThemeCenterAndNoSynergy) {
+        if (needsThemeCenterAndNoSynergy && !prefs.forceNormalInstall) {
             install.animatedVisibility = View.VISIBLE
             install.setOnClickListener {
                 progress.animatedVisibility = View.VISIBLE

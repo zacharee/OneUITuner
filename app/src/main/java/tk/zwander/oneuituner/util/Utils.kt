@@ -57,7 +57,7 @@ val Context.prefs: PrefManager
 fun Context.isInstalled(packageName: String) =
     when {
         prefs.useSynergy -> false
-        needsThemeCenter -> isPartInstalled(packageName)
+        needsThemeCenter && !prefs.forceNormalInstall -> isPartInstalled(packageName)
         else -> isPartActive(packageName)
     }
 

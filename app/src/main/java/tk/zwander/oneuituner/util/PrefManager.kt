@@ -43,6 +43,7 @@ class PrefManager private constructor(context: Context) : ContextWrapper(context
         const val LOCK_SCREEN_ROTATION = "lock_screen_rotation"
 
         const val USE_SYNERGY = "use_synergy"
+        const val FORCE_NORMAL_INSTALL = "force_normal_install"
     }
 
     private val prefs = PreferenceManager.getDefaultSharedPreferences(this)
@@ -113,6 +114,9 @@ class PrefManager private constructor(context: Context) : ContextWrapper(context
         set(value) {
             putBoolean(USE_SYNERGY, value)
         }
+
+    val forceNormalInstall: Boolean
+        get() = getBoolean(FORCE_NORMAL_INSTALL, resourceBool(R.bool.force_normal_install))
 
     fun getInt(key: String, def: Int = 0) = prefs.getInt(key, def)
     fun getString(key: String, def: String): String = prefs.getString(key, def) ?: def
