@@ -46,7 +46,7 @@ class PrefManager private constructor(context: Context) : ContextWrapper(context
         const val FORCE_NORMAL_INSTALL = "force_normal_install"
     }
 
-    private val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+    val preferences = PreferenceManager.getDefaultSharedPreferences(this)
 
     val clockTypeDefault = resourceString(R.string.clock_type_default)
     val clockTypeCustom = resourceString(R.string.clock_type_custom)
@@ -118,19 +118,19 @@ class PrefManager private constructor(context: Context) : ContextWrapper(context
     val forceNormalInstall: Boolean
         get() = getBoolean(FORCE_NORMAL_INSTALL, resourceBool(R.bool.force_normal_install))
 
-    fun getInt(key: String, def: Int = 0) = prefs.getInt(key, def)
-    fun getString(key: String, def: String): String = prefs.getString(key, def) ?: def
-    fun getBoolean(key: String, def: Boolean = false) = prefs.getBoolean(key, def)
+    fun getInt(key: String, def: Int = 0) = preferences.getInt(key, def)
+    fun getString(key: String, def: String): String = preferences.getString(key, def) ?: def
+    fun getBoolean(key: String, def: Boolean = false) = preferences.getBoolean(key, def)
 
-    fun putInt(key: String, value: Int) = prefs.edit().putInt(key, value).apply()
-    fun putString(key: String, value: String?) = prefs.edit().putString(key, value).apply()
-    fun putBoolean(key: String, value: Boolean) = prefs.edit().putBoolean(key, value).apply()
+    fun putInt(key: String, value: Int) = preferences.edit().putInt(key, value).apply()
+    fun putString(key: String, value: String?) = preferences.edit().putString(key, value).apply()
+    fun putBoolean(key: String, value: Boolean) = preferences.edit().putBoolean(key, value).apply()
 
     fun registerOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) =
-            prefs.registerOnSharedPreferenceChangeListener(listener)
+            preferences.registerOnSharedPreferenceChangeListener(listener)
 
     fun unregisterOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) =
-            prefs.unregisterOnSharedPreferenceChangeListener(listener)
+            preferences.unregisterOnSharedPreferenceChangeListener(listener)
 
     private fun resourceInt(id: Int) = resources.getInteger(id)
     private fun resourceString(id: Int) = resources.getString(id)

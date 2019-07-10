@@ -2,6 +2,7 @@
     <string name="app_name">OneUI Tuner</string>
     <string name="options">Options</string>
     <string name="tweaks">Tweaks</string>
+    <string name="menu">Menu</string>
 
     <string name="clock">Clock</string>
     <string name="qs">Quick Settings</string>
@@ -24,6 +25,7 @@
     <string name="remove_component">Remove Component</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="undo">Undo</string>
 
     <string name="header_count_portrait">Header Count (Portrait)</string>
     <string name="header_count_landscape">Header Count (Landscape)</string>
@@ -49,6 +51,7 @@
     <string name="status_bar_clock_type">Status Bar Clock Type</string>
     <string name="use_synergy">Use Synergy</string>
     <string name="force_normal_install">Force Normal Install</string>
+    <string name="overlay_file_manager">Overlay File Manager</string>
 
     <string name="root_required_desc">Because of limitations added in later versions of One UI, your device must be rooted to use this app.</string>
     <string name="old_recents_desc">Restores the old vertical Recents carousel. Reboot required.</string>
@@ -61,6 +64,7 @@
     <string name="status_bar_clock_type_desc">Choose to replace the status bar clock with the AOSP style or a custom format. The AOSP clock will allow you to enable seconds using SystemUI Tuner. The custom format will allow you to use any format you want, but won\'t automatically change color.</string>
     <string name="synergy_not_installed_desc">It looks like Synergy isn\'t installed. Would you like to check it out?</string>
     <string name="force_normal_install_desc">On many devices on One UI, Samsung blocked normal installation of overlays. To be safe, OneUI Tuner will make all devices except the S9, S9+, and Note9 use the Theme Center workaround. Other devices running One UI may still be able to use the normal method of installation (without the Theme Center). Turn this on to try it out.</string>
+    <string name="overlay_removed">Overlay removed</string>
 
     <string name="qqs_hint">Set your QS grid to 5x3 if the header icons overlap at higher values.</string>
     <string name="qs_row_col_hint">Set your QS grid to 5x3 for these to take effect.</string>

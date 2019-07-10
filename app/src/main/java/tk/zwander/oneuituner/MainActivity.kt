@@ -28,6 +28,7 @@ import com.samsungthemelib.ui.PermissionsActivity
 import com.samsungthemelib.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import tk.zwander.oneuituner.ui.MenuModal
 import tk.zwander.oneuituner.util.*
 import java.io.File
 import java.net.URLConnection
@@ -86,6 +87,20 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         bottom_bar.setNavigationOnClickListener {
             onBackPressed()
         }
+
+        menuInflater.inflate(R.menu.menu, bottom_bar.menu)
+
+        bottom_bar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.open_menu -> {
+                    MenuModal()
+                        .show(supportFragmentManager, null)
+                    true
+                }
+                else -> false
+            }
+        }
+
         navButton.visibility = View.GONE
 
         with(bottom_bar.background as MaterialShapeDrawable) {
