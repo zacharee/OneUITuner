@@ -253,7 +253,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         navButton.animatedVisibility = if (enabled) View.VISIBLE else View.GONE
         apply.animatedVisibility = if (enabled) View.VISIBLE else View.INVISIBLE
 
-        remove.animatedVisibility = if (
+        remove.animatedVisibility = when {
             when (id) {
                 R.id.clock -> isInstalled(Keys.clockPkg)
                 R.id.qs -> isInstalled(Keys.qsPkg)
@@ -261,8 +261,10 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 R.id.statusBar -> isInstalled(Keys.statusBarPkg)
                 R.id.lockScreen -> isInstalled(Keys.lockScreenPkg)
                 else -> false
-            }
-        ) View.VISIBLE else if (prefs.useSynergy) View.GONE else View.INVISIBLE
+            } -> View.VISIBLE
+            prefs.useSynergy -> View.GONE
+            else -> View.INVISIBLE
+        }
 
         if (needsThemeCenterAndNoSynergy && !prefs.forceNormalInstall) {
             install.animatedVisibility = View.VISIBLE
