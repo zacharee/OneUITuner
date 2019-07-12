@@ -55,6 +55,12 @@
             android:icon="@drawable/ic_archive_24dp"
             />
 
+        <SwitchPreference
+            android:title="@string/enable_theme_center"
+            android:key="enable_theme_center"
+            android:defaultValue="true"
+            />
+
         <Preference
             android:title="Push to Framework"
             android:key="push_to_fwk"

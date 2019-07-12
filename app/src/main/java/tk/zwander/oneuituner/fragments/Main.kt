@@ -1,14 +1,15 @@
 package tk.zwander.oneuituner.fragments
 
+import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import com.samsungthemelib.util.mainHandler
 import com.samsungthemelib.util.needsThemeCenter
-import com.samsungthemelib.util.themeLibApp
 import tk.zwander.oneuituner.R
 import tk.zwander.oneuituner.util.*
 
@@ -54,11 +55,25 @@ class Main : Base() {
 
         with(findPreference("push_to_fwk")) {
             setOnPreferenceClickListener {
-                context!!.themeLibApp.ipcReceiver.postIPCAction {
-                    it.copyAndApplyThemes()
-                }
+//                context!!.themeLibApp.ipcReceiver.postIPCAction {
+//                    it.copyAndApplyThemes()
+//                }
+                Log.e("OneUITuner", "sending intent")
+
+                val intent = Intent()
+                intent.component = ComponentName("tk.zwander.deviceowner", "tk.zwander.deviceowner.api.ActionRequestReceiver")
+                intent.action = "tk.zwander.deviceowner.intent.action.SET_PACKAGE_HIDDEN"
+                intent.putExtra("target_package", "com.samsung.android.themecenter")
+                intent.putExtra("package_hidden", true)
+
+                context!!.sendBroadcast(intent)
+
                 true
             }
+        }
+
+        with(findPreference("enable_theme_center")) {
+            isen
         }
     }
 

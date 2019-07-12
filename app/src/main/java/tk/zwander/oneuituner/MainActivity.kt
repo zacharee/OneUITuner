@@ -3,10 +3,10 @@ package tk.zwander.oneuituner
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.LayoutTransition
-import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageInstaller
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -241,7 +241,13 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         when (requestCode) {
             PermissionsActivity.REQ_PERMISSIONS -> {
-                if (resultCode != Activity.RESULT_OK) finish()
+                val perms = data?.getStringArrayExtra(PermissionsActivity.EXTRA_PERMISSIONS)!!
+                val results = data.getIntArrayExtra(PermissionsActivity.EXTRA_PERMISSION_RESULTS)!!
+
+                perms.forEachIndexed { index, s ->
+                    if (s == android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        && results[index] != PackageManager.PERMISSION_GRANTED) finish()
+                }
             }
         }
     }
