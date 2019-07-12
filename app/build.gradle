@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "tk.zwander.oneuituner"
-        minSdkVersion 26
+        minSdkVersion 28
         targetSdkVersion 28
         versionCode version
         versionName "$version"
