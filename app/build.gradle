@@ -59,5 +59,4 @@ dependencies {
 //    implementation 'com.github.zacharee:SamsungThemeLib:8c17488ddd'
 
     implementation project(':themelib')
-    implementation project(':sdk')
 }
