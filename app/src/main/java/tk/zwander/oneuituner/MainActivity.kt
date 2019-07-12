@@ -9,6 +9,7 @@ import android.content.pm.PackageInstaller
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.AnticipateInterpolator
@@ -28,6 +29,9 @@ import com.samsungthemelib.ui.PermissionsActivity
 import com.samsungthemelib.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import tk.zwander.deviceowner.sdk.IAdminRequestCallback
+import tk.zwander.deviceowner.sdk.getAdminBinder
+import tk.zwander.deviceowner.sdk.getAdminService
 import tk.zwander.oneuituner.ui.MenuModal
 import tk.zwander.oneuituner.util.*
 import java.io.File
@@ -105,7 +109,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         with(bottom_bar.background as MaterialShapeDrawable) {
             val color = ElevationOverlayProvider(this@MainActivity)
-                .getSurfaceColorWithOverlayIfNeeded(elevation)
+                .compositeOverlayWithThemeSurfaceColorIfNeeded(elevation)
 
             window.navigationBarColor = color
         }
@@ -141,6 +145,18 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         themeLibApp.addResultListener(resultListener)
         themeLibApp.addConnectionListener(this)
+
+        getAdminBinder()
+            ?.getAdminService()
+            ?.apply {
+                if (!isAllowed) {
+                    requestPermission(object : IAdminRequestCallback.Stub() {
+                        override fun onResult(packageName: String?, granted: Boolean) {
+                            Log.e("OneUITuner", "Permission grant result: $granted")
+                        }
+                    })
+                }
+            }
     }
 
     override fun onIPCConnected(ipc: IRootInterface?) {
@@ -241,12 +257,12 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         when (requestCode) {
             PermissionsActivity.REQ_PERMISSIONS -> {
-                val perms = data?.getStringArrayExtra(PermissionsActivity.EXTRA_PERMISSIONS)!!
-                val results = data.getIntArrayExtra(PermissionsActivity.EXTRA_PERMISSION_RESULTS)!!
+                val perms = data?.getStringArrayExtra(PermissionsActivity.EXTRA_PERMISSIONS)
+                val results = data?.getIntArrayExtra(PermissionsActivity.EXTRA_PERMISSION_RESULTS)
 
-                perms.forEachIndexed { index, s ->
+                perms?.forEachIndexed { index, s ->
                     if (s == android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        && results[index] != PackageManager.PERMISSION_GRANTED) finish()
+                        && results!![index] != PackageManager.PERMISSION_GRANTED) finish()
                 }
             }
         }

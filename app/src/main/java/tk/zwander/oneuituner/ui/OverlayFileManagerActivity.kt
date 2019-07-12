@@ -18,7 +18,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.samsungthemelib.util.SEARCH_PATH
 import com.samsungthemelib.util.isAPK
 import com.samsungthemelib.util.mainHandler
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_overlay_file_manager.*
+import kotlinx.android.synthetic.main.activity_overlay_file_manager.bottom_bar
+import kotlinx.android.synthetic.main.activity_overlay_file_manager.content
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import tk.zwander.oneuituner.R
@@ -43,7 +46,7 @@ class OverlayFileManagerActivity : AppCompatActivity() {
 
         with(bottom_bar.background as MaterialShapeDrawable) {
             val color = ElevationOverlayProvider(this@OverlayFileManagerActivity)
-                .getSurfaceColorWithOverlayIfNeeded(elevation)
+                .compositeOverlayWithThemeSurfaceColorIfNeeded(elevation)
 
             window.navigationBarColor = color
         }
