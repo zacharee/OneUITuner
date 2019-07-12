@@ -8,6 +8,7 @@ import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import com.samsungthemelib.util.mainHandler
 import com.samsungthemelib.util.needsThemeCenter
+import com.samsungthemelib.util.themeLibApp
 import tk.zwander.oneuituner.R
 import tk.zwander.oneuituner.util.*
 
@@ -49,6 +50,15 @@ class Main : Base() {
 
         with(findPreference(PrefManager.FORCE_NORMAL_INSTALL)) {
             isVisible = needsThemeCenter
+        }
+
+        with(findPreference("push_to_fwk")) {
+            setOnPreferenceClickListener {
+                context!!.themeLibApp.ipcReceiver.postIPCAction {
+                    it.copyAndApplyThemes()
+                }
+                true
+            }
         }
     }
 
