@@ -1,3 +1,4 @@
-include ':app', ':themelib'
+include ':app', ':themelib', ':sdk'
 
 project(':themelib').projectDir = new File("../SamsungThemeLib/library/")
+project(':sdk').projectDir = new File("../DeviceOwnerSDK/library")

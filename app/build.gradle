@@ -47,7 +47,7 @@ dependencies {
     implementation 'com.android.tools.build:apksig:3.2.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.0'
-    implementation 'com.google.android.material:material:1.1.0-alpha07'
+    implementation 'com.google.android.material:material:1.1.0-alpha08'
     implementation 'android.arch.navigation:navigation-fragment-ktx:1.0.0'
     implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0'
 
@@ -59,4 +59,5 @@ dependencies {
 //    implementation 'com.github.zacharee:SamsungThemeLib:8c17488ddd'
 
     implementation project(':themelib')
+    implementation project(':sdk')
 }
