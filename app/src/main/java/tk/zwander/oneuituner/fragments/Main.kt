@@ -76,7 +76,7 @@ class Main : Base() {
         with(findPreference("enable_theme_center") as SwitchPreference) {
             val service = context!!.getAdminService()
 
-            isChecked = service?.isApplicationHidden("com.samsung.android.themeenter") != false
+            isChecked = service?.isApplicationHidden("com.samsung.android.themeenter") != true
 
             setOnPreferenceChangeListener { _, newValue ->
                 service?.setApplicationHidden("com.samsung.android.themecenter", !newValue.toString().toBoolean())
