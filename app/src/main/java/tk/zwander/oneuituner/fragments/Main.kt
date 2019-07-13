@@ -10,7 +10,6 @@ import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import com.samsungthemelib.util.mainHandler
 import com.samsungthemelib.util.needsThemeCenter
-import tk.zwander.deviceowner.sdk.getAdminBinder
 import tk.zwander.deviceowner.sdk.getAdminService
 import tk.zwander.oneuituner.R
 import tk.zwander.oneuituner.util.*
@@ -75,7 +74,7 @@ class Main : Base() {
         }
 
         with(findPreference("enable_theme_center") as SwitchPreference) {
-            val service = context!!.getAdminBinder()?.getAdminService()
+            val service = context!!.getAdminService()
 
             isChecked = service?.isApplicationHidden("com.samsung.android.themeenter") != false
 

@@ -30,7 +30,6 @@ import com.samsungthemelib.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import tk.zwander.deviceowner.sdk.IAdminRequestCallback
-import tk.zwander.deviceowner.sdk.getAdminBinder
 import tk.zwander.deviceowner.sdk.getAdminService
 import tk.zwander.oneuituner.ui.MenuModal
 import tk.zwander.oneuituner.util.*
@@ -146,9 +145,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         themeLibApp.addResultListener(resultListener)
         themeLibApp.addConnectionListener(this)
 
-        getAdminBinder()
-            ?.getAdminService()
-            ?.apply {
+        getAdminService()?.apply {
                 if (!isAllowed) {
                     requestPermission(object : IAdminRequestCallback.Stub() {
                         override fun onResult(packageName: String?, granted: Boolean) {
