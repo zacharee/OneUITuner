@@ -64,7 +64,6 @@
         <Preference
             android:title="Push to Framework"
             android:key="push_to_fwk"
-            app:isPreferenceVisible="false"
             />
 
     </PreferenceCategory>

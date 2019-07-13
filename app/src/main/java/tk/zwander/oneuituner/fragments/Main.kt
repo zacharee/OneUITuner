@@ -1,10 +1,8 @@
 package tk.zwander.oneuituner.fragments
 
-import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
@@ -59,15 +57,6 @@ class Main : Base() {
 //                context!!.themeLibApp.ipcReceiver.postIPCAction {
 //                    it.copyAndApplyThemes()
 //                }
-                Log.e("OneUITuner", "sending intent")
-
-                val intent = Intent()
-                intent.component = ComponentName("tk.zwander.deviceowner", "tk.zwander.deviceowner.api.ActionRequestReceiver")
-                intent.action = "tk.zwander.deviceowner.intent.action.SET_PACKAGE_HIDDEN"
-                intent.putExtra("target_package", "com.samsung.android.themecenter")
-                intent.putExtra("package_hidden", true)
-
-                context!!.sendBroadcast(intent)
 
                 true
             }
@@ -75,8 +64,9 @@ class Main : Base() {
 
         with(findPreference("enable_theme_center") as SwitchPreference) {
             val service = context!!.getAdminService()
+            val hidden = service?.isApplicationHidden("com.samsung.android.themecenter")
 
-            isChecked = service?.isApplicationHidden("com.samsung.android.themeenter") != true
+            isChecked = hidden != true
 
             setOnPreferenceChangeListener { _, newValue ->
                 service?.setApplicationHidden("com.samsung.android.themecenter", !newValue.toString().toBoolean())
