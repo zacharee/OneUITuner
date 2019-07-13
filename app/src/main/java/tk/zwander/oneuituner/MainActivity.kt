@@ -146,14 +146,14 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         themeLibApp.addConnectionListener(this)
 
         getAdminService()?.apply {
-                if (!isAllowed) {
-                    requestPermission(object : IAdminRequestCallback.Stub() {
-                        override fun onResult(packageName: String?, granted: Boolean) {
-                            Log.e("OneUITuner", "Permission grant result: $granted")
-                        }
-                    })
-                }
+            if (!isAllowed) {
+                requestPermission(object : IAdminRequestCallback.Stub() {
+                    override fun onResult(packageName: String?, granted: Boolean) {
+                        Log.e("OneUITuner", "Permission grant result: $granted")
+                    }
+                })
             }
+        }
     }
 
     override fun onIPCConnected(ipc: IRootInterface?) {
