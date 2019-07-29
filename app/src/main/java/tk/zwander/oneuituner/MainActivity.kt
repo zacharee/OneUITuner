@@ -154,6 +154,24 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 })
             }
         }
+
+//        val semCscFeatureClass = Class.forName("com.samsung.android.feature.SemCscFeature")
+//        val getInstance = semCscFeatureClass.getMethod("getInstance")
+//        val instance = getInstance.invoke(null)
+//        val getString = semCscFeatureClass.getMethod("getString", String::class.java, String::class.java)
+//
+//        val string = getString.invoke(instance, "CscFeature_Framework_ConfigLabelForDefTheme", "")
+//
+//        Log.e("OneUITuner", "String: $string")
+
+        val semFloatingFeatureClass = Class.forName("com.samsung.android.feature.SemFloatingFeature")
+        val getInstance = semFloatingFeatureClass.getMethod("getInstance")
+        val instance = getInstance.invoke(null)
+        val getString = semFloatingFeatureClass.getMethod("getString", String::class.java)
+
+        val string = getString.invoke(instance, "SEC_FLOATING_FEATURE_SYSTEMUI_CONFIG_NOTIFICATION_BG_COLOR")
+
+        Log.e("OneUITuner", "string: $string")
     }
 
     override fun onIPCConnected(ipc: IRootInterface?) {
