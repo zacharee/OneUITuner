@@ -18,7 +18,7 @@ class Main : Base() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.main, rootKey)
 
-        with(findPreference(PrefManager.USE_SYNERGY)) {
+        with(findPreference<Preference>(PrefManager.USE_SYNERGY)!!) {
             onPreferenceChangeListener =
                 Preference.OnPreferenceChangeListener { pref, newValue ->
                     val enabled = newValue.toString().toBoolean()
@@ -48,11 +48,11 @@ class Main : Base() {
                 }
         }
 
-        with(findPreference(PrefManager.FORCE_NORMAL_INSTALL)) {
+        with(findPreference<Preference>(PrefManager.FORCE_NORMAL_INSTALL)!!) {
             isVisible = needsThemeCenter
         }
 
-        with(findPreference("push_to_fwk")) {
+        with(findPreference<Preference>("push_to_fwk")!!) {
             setOnPreferenceClickListener {
 //                context!!.themeLibApp.ipcReceiver.postIPCAction {
 //                    it.copyAndApplyThemes()
@@ -62,7 +62,7 @@ class Main : Base() {
             }
         }
 
-        with(findPreference("enable_theme_center") as SwitchPreference) {
+        with(findPreference<SwitchPreference>("enable_theme_center") as SwitchPreference) {
             val manager = context!!.actionManager
             val hidden = manager.isApplicationHidden("com.samsung.android.themecenter")
 

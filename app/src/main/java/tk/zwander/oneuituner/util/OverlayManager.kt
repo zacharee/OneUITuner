@@ -286,6 +286,24 @@ fun Context.compile(which: String, listener: ((apk: File) -> Unit)?) {
                                     }
                                 }
                             )
+                        ),
+                        ResourceFileData(
+                            "integers.xml",
+                            "values",
+                            makeResourceXml(
+                                mutableListOf(
+                                    ResourceData(
+                                        "integer",
+                                        "multiwindow_freeform_max_count",
+                                        "${prefs.freeformMax}"
+                                    ),
+                                    ResourceData(
+                                        "integer",
+                                        "multiwindow_desktop_freeform_max_count",
+                                        "${prefs.desktopFreeformMax}"
+                                    )
+                                )
+                            )
                         )
                     )
                 )

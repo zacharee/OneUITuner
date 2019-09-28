@@ -10,8 +10,8 @@ import tk.zwander.oneuituner.util.prefs
 class Clock : Base() {
     override val title = R.string.clock
 
-    private val clockType by lazy { findPreference(PrefManager.CLOCK_TYPE) as ListPreference }
-    private val clockFormat: Preference by lazy { findPreference(PrefManager.CLOCK_FORMAT) }
+    private val clockType by lazy { findPreference<ListPreference>(PrefManager.CLOCK_TYPE) as ListPreference }
+    private val clockFormat: Preference by lazy { findPreference<Preference>(PrefManager.CLOCK_FORMAT)!! }
 
     init {
         keysToSync.add(PrefManager.CLOCK_FORMAT)

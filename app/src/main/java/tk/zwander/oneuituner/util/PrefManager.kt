@@ -34,6 +34,8 @@ class PrefManager private constructor(context: Context) : ContextWrapper(context
         const val OLD_RECENTS = "old_recents"
         const val NAV_HEIGHT = "nav_height"
         const val STATUS_BAR_HEIGHT = "status_bar_height"
+        const val FREEFORM_MAX_COUNT = "freeform_max"
+        const val FREEFORM_DESKTOP_MAX_COUNT = "desktop_freeform_max"
 
         const val LEFT_SYSTEM_ICONS = "left_system_icons"
         const val HIDE_STATUS_BAR_CARRIER = "hide_status_bar_carrier"
@@ -117,6 +119,12 @@ class PrefManager private constructor(context: Context) : ContextWrapper(context
 
     val forceNormalInstall: Boolean
         get() = getBoolean(FORCE_NORMAL_INSTALL, resourceBool(R.bool.force_normal_install))
+
+    val freeformMax: Int
+        get() = getString(FREEFORM_MAX_COUNT, resourceInt(R.integer.freeform_max_default).toString()).toInt()
+
+    val desktopFreeformMax: Int
+        get() = getString(FREEFORM_DESKTOP_MAX_COUNT, resourceInt(R.integer.desktop_freeform_max_default).toString()).toInt()
 
     fun getInt(key: String, def: Int = 0) = preferences.getInt(key, def)
     fun getString(key: String, def: String): String = preferences.getString(key, def) ?: def

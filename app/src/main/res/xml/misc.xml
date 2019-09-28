@@ -29,4 +29,18 @@
         app:maxValue="@integer/status_height_max"
         />
 
+    <EditTextPreference
+        android:title="@string/freeform_max"
+        android:key="freeform_max"
+        android:defaultValue="@integer/freeform_max_default"
+        app:dialogLayout="@layout/number_edit_text"
+        />
+
+    <EditTextPreference
+        android:title="@string/desktop_freeform_max"
+        android:key="desktop_freeform_max"
+        android:defaultValue="@integer/desktop_freeform_max_default"
+        app:dialogLayout="@layout/number_edit_text"
+        />
+
 </PreferenceScreen>

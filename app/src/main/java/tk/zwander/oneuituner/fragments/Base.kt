@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.preference.ListPreference
+import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.recyclerview.widget.RecyclerView
 import tk.zwander.oneuituner.R
@@ -59,7 +60,7 @@ abstract class Base : PreferenceFragmentCompat(), SharedPreferences.OnSharedPref
     internal fun syncSummary(key: String?) {
         key?.let {
             if (keysToSync.contains(it)) {
-                findPreference(it)?.apply {
+                findPreference<Preference>(it)?.apply {
                     when {
                         this is ListPreference -> {
                             summary = entry

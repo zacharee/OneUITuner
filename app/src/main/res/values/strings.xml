@@ -53,6 +53,8 @@
     <string name="force_normal_install">Force Normal Install</string>
     <string name="overlay_file_manager">Overlay File Manager</string>
     <string name="enable_theme_center">Enable Theme Center</string>
+    <string name="desktop_freeform_max">Max Freeform Window Count (Desktop)</string>
+    <string name="freeform_max">Max Freeform Window Count</string>
 
     <string name="root_required_desc">Because of limitations added in later versions of One UI, your device must be rooted to use this app.</string>
     <string name="old_recents_desc">Restores the old vertical Recents carousel. Reboot required.</string>

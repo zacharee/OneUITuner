@@ -24,4 +24,6 @@
     <integer name="nav_height_unscaled_default">480</integer>
     <!-- Scale: 0.1 (240 ==> 24) -->
     <integer name="status_bar_height_unscaled_default">240</integer>
+    <integer name="freeform_max_default">5</integer>
+    <integer name="desktop_freeform_max_default">20</integer>
 </resources>
